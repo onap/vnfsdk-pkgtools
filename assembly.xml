@@ -30,6 +30,7 @@ under the License.
                 <include>Makefile</include>
                 <include>cli/**</include>
                 <include>packager/**</include>
+                <include>requirements.txt</include>
             </includes>
             <excludes>
                 <exclude>**/*.pyc</exclude>
