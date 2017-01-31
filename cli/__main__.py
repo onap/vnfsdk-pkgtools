@@ -15,6 +15,7 @@
 #
 
 from packager import csar
+import sys
 import logging
 import argparse
 from aria import install_aria_extensions
@@ -61,7 +62,7 @@ def csar_validate_func(namespace):
         shutil.rmtree(workdir, ignore_errors=True)
 
 
-def main():
+def parse_args(args_list):
     """
     CLI entry point
     """
@@ -104,7 +105,10 @@ def main():
         'source',
         help='CSAR file location')
 
-    args = parser.parse_args()
+    return parser.parse_args(args_list)
+
+def main():
+    args = parse_args(sys.argv)
     args.func(args)
 
 
