@@ -108,7 +108,7 @@ def parse_args(args_list):
     return parser.parse_args(args_list)
 
 def main():
-    args = parse_args(sys.argv)
+    args = parse_args(sys.argv[1:])
     args.func(args)
 
 
