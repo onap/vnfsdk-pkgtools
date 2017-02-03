@@ -25,8 +25,8 @@ under the License.
         <relativePath>../oparent</relativePath>
     </parent>
 
-    <groupId>org.openo.vnf-sdk-design-pkg</groupId>
-    <artifactId>vnfsdk</artifactId>
+    <groupId>org.openo.vnf-sdk.design-pkg</groupId>
+    <artifactId>vnf-sdk-design-pkg</artifactId>
 
     <name>vnf-sdk-design-pkg</name>
     <description>CSAR manipulation shared library with CLI</description>
