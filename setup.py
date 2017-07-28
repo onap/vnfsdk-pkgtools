@@ -33,7 +33,7 @@ setup(
     author='GigaSpaces',
     author_email='info@gigaspaces.com',
 
-    url='http://open-o.org/',
+    url='http://onap.org/',
 
     classifiers=[
         'Development Status :: 4 - Beta',
