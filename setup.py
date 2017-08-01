@@ -66,10 +66,5 @@ setup(
     install_requires=[
         'ruamel.yaml<0.12.0,>=0.11.12',
         'requests<2.14.0,>=2.3.0',
-        'logging',
-        'clint==0.5.1',
-        'CacheControl[filecache]==0.11.6',
-        'lockfile',
-        'Jinja2==2.8',
         'apache-ariatosca==0.1.1'])
 
