@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_795e5feb",
+        "filename": "setup.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 551
+      },
+      "writtenOn": "2017-08-01T07:21:45Z",
+      "side": 0,
+      "message": "I\u0027d like to remove this comment since this doesn\u0027t make sense anymore from my point of view.",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 69
+      },
+      "revId": "9b2c52b958acf3e104259f79db4df8de61910630",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
