@@ -22,14 +22,14 @@ from aria import install_aria_extensions
 import os
 import shutil
 import tempfile
-from aria.loading import LiteralLocation
-from aria.consumption import (
+from aria.parser.loading import LiteralLocation
+from aria.parser.consumption import (
     ConsumptionContext,
     ConsumerChain,
     Read,
     Validate,
-    Model,
-    Instance
+    ServiceTemplate,
+    ServiceInstance
 )
 
 def csar_create_func(namespace):
@@ -52,7 +52,7 @@ def csar_validate_func(namespace):
         context.loading.prefixes += [os.path.join(reader.destination, 'definitions')]
         context.presentation.location = LiteralLocation(reader.entry_definitions_yaml)
         print reader.entry_definitions_yaml
-        chain = ConsumerChain(context, (Read, Validate, Model, Instance))
+        chain = ConsumerChain(context, (Read, Validate, ServiceTemplate, ServiceInstance))
         chain.consume()
         if context.validation.dump_issues():
             raise RuntimeError('Validation failed')
