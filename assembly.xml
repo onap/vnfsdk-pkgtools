@@ -26,7 +26,8 @@ under the License.
             <includes>
                 <include>COPYRIGHT</include>
                 <include>LICENSE</include>
-                <include>setup.py</include>
+	        <include>setup.py</include>
+	        <include>MANIFEST.in</include>
                 <include>Makefile</include>
                 <include>cli/**</include>
                 <include>packager/**</include>
