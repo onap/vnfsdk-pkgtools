@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a1a2d67_1c9e3957",
+        "filename": "pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 551
+      },
+      "writtenOn": "2017-08-02T02:19:33Z",
+      "side": 1,
+      "message": "I will address this in another review since it\u0027s a difference issue.",
+      "parentUuid": "1a1a2d67_99681b89",
+      "range": {
+        "startLine": 24,
+        "startChar": 40,
+        "endLine": 24,
+        "endChar": 41
+      },
+      "revId": "94aa84e3c37092e8ec007dd306ff79279946915e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a1a2d67_79053fc1",
         "filename": "pom.xml",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2017-08-01T08:24:58Z",
       "side": 1,
       "message": "Also, should we consider make the artifactId and groupId consistent? No objection, just a suggestion.",
+      "range": {
+        "startLine": 29,
+        "startChar": 46,
+        "endLine": 29,
+        "endChar": 47
+      },
+      "revId": "94aa84e3c37092e8ec007dd306ff79279946915e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_5c94b136",
+        "filename": "pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 551
+      },
+      "writtenOn": "2017-08-02T02:19:33Z",
+      "side": 1,
+      "message": "Good suggestion!",
+      "parentUuid": "1a1a2d67_79053fc1",
       "range": {
         "startLine": 29,
         "startChar": 46,
