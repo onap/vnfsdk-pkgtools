@@ -22,6 +22,30 @@
       "revId": "9b2c52b958acf3e104259f79db4df8de61910630",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_fce6dd15",
+        "filename": "setup.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 309
+      },
+      "writtenOn": "2017-08-02T00:28:10Z",
+      "side": 0,
+      "message": "This sentence maybe inaccurate. But we still need to make sure the ruamel.yaml and requests versions in sync with aria. Because of how pip handles the dependency, the version requirements of ruamel.yaml and reqeusts of aria won\u0027t override the version specified here. So we have to make it in sync.",
+      "parentUuid": "1a1a2d67_795e5feb",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 69
+      },
+      "revId": "9b2c52b958acf3e104259f79db4df8de61910630",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
