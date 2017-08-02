@@ -46,6 +46,30 @@
       "revId": "f55257424e51e75b9cee40990359d18431cc8641",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_7c040d7e",
+        "filename": "pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 551
+      },
+      "writtenOn": "2017-08-02T03:45:27Z",
+      "side": 1,
+      "message": "will clean those up when I got another chance.",
+      "parentUuid": "1a1a2d67_dcc68149",
+      "range": {
+        "startLine": 31,
+        "startChar": 34,
+        "endLine": 31,
+        "endChar": 35
+      },
+      "revId": "f55257424e51e75b9cee40990359d18431cc8641",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
