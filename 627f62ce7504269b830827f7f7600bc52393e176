@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_ce059615",
+        "filename": "setup.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 551
+      },
+      "writtenOn": "2017-08-18T03:39:21Z",
+      "side": 1,
+      "message": "should we have \":\" for each of them, or just need the one for the first to separates the extra name?",
+      "range": {
+        "startLine": 44,
+        "startChar": 12,
+        "endLine": 44,
+        "endChar": 56
+      },
+      "revId": "627f62ce7504269b830827f7f7600bc52393e176",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
