@@ -46,6 +46,30 @@
       "revId": "627f62ce7504269b830827f7f7600bc52393e176",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_b1c4f35f",
+        "filename": "setup.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 551
+      },
+      "writtenOn": "2017-08-18T07:17:54Z",
+      "side": 1,
+      "message": "But seen the example from the doc, only the first dependency has the \":\" ahead of the condition name.\n\nextras_require\u003d{\n    \u0027:python_version\u003d\u003d\"2.6\"\u0027: [\u0027argparse\u0027],\n    \u0027signatures\u0027: [\u0027keyring\u0027],\n    \u0027signatures:sys_platform!\u003d\"win32\"\u0027: [\u0027pyxdg\u0027],\n    \u0027faster-signatures\u0027: [\u0027ed25519ll\u0027],\n    \u0027tool\u0027: []\n    },",
+      "parentUuid": "9a437d4f_f1ab9bd4",
+      "range": {
+        "startLine": 44,
+        "startChar": 12,
+        "endLine": 44,
+        "endChar": 56
+      },
+      "revId": "627f62ce7504269b830827f7f7600bc52393e176",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
