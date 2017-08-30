@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="EVEL Java Agent" default="clean" basedir=".">
+
+    <property name="dist" value="dist"/>
+    <property name="classes" value="build/classes"/>
+    <property name="test_classes" value="build/test_classes"/>
+
+    <path id="compile_classpath">
+        <pathelement location="${classes}"/>
+        <fileset dir="lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="build_classpath">
+        <path refid="compile_classpath"/>
+        <fileset dir="build_time_libs">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="test_classpath">
+        <path refid="compile_classpath"/>
+        <fileset dir="build_time_libs">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement  location="${test_classes}"/>
+    </path>
+
+    <path id="run_classpath">
+        <fileset dir="lib">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="dist">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="clean">
+        <delete dir="${classes}" failonerror="true"/>
+        <mkdir dir="${classes}"/>
+        <delete dir="${test_classes}" failonerror="true"/>
+        <mkdir dir="${test_classes}"/>
+        <delete dir="${dist}" failonerror="true"/>
+        <mkdir dir="${dist}"/>
+    </target>
+
+    <target name="compile" depends="clean">
+        <javac srcdir="src" destdir="${classes}" debug="on" optimize="off" deprecation="off" includeantruntime="false">
+            <classpath refid="compile_classpath"/>
+        </javac>
+    </target>
+
+
+    <target name="compile_tests" depends="compile">
+        <javac srcdir="src_test" destdir="${test_classes}" debug="on" optimize="off" deprecation="off" includeantruntime="false">
+            <classpath refid="build_classpath"/>
+        </javac>
+    </target>
+
+    <target name="instrument" depends="compile_tests">
+        <java classname="org.javalite.instrumentation.Main">
+            <sysproperty key="outputDirectory" value="${classes}"/>
+            <classpath refid="build_classpath"/>
+        </java>
+    </target>
+
+    <target name="test" depends="instrument">
+        <junit  printsummary="yes"  haltonfailure="true" showoutput="true">
+            <classpath>
+                <path refid="test_classpath"/>
+            </classpath>
+            <formatter type="plain"/>            
+            <test name="evel_javalibrary.att.com.VESSpec"/>
+        </junit>
+    </target>
+
+    <target name="package" depends="test">
+        <jar destfile="${dist}/ves.jar" basedir="${classes}"/>
+    </target>
+	
+	<!-- Group all dependencies into a big dependency-all.jar -->
+	<target name="copy-dependencies">
+
+		<mkdir dir="${dist}" />
+
+		<jar jarfile="${dist}/dependencies-all.jar">
+			<zipgroupfileset dir="lib">
+				<include name="**/*.jar" />
+			</zipgroupfileset>
+		</jar>
+
+	</target>
+
+	<!-- jar it, extract above dependency-all.jar and zip it with project files -->
+	<target name="jar" depends="compile, copy-dependencies"
+	                description="package, output to JAR">
+
+		<mkdir dir="${dist}" />
+		<mkdir dir="${dist}/lib" />
+
+		<jar jarfile="${dist}/VESLibrary.jar" basedir="build/classes">
+			<!--manifest>
+				<attribute name="backup-main" value="${main-class}" />
+			</manifest-->
+			<exclude name="**/maindir/**" />
+			<zipfileset src="${dist}/dependencies-all.jar"
+	                                excludes="META-INF/*.SF" />
+		</jar>
+
+	</target>
+    
+    <target name="run" depends="package,jar">
+        <java classname="evel_javalibrary.att.com.Main" failonerror="true" fork="true">
+            <jvmarg value="-Dveslibrary.log"/>
+            <classpath refid="run_classpath"/>
+        </java>
+    </target>
+
+</project>
