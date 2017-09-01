@@ -73,17 +73,22 @@ setup(
 
     packages=[
         'packager',
-        'cli'
+        'cli',
+        'validator'
     ],
 
     package_dir={
         'packager': 'packager',
         'cli': 'cli',
+        'validator': 'validator'
     },
 
     entry_points={
         'console_scripts': [
-            'vnfsdk = cli.__main__:main']
+            'vnfsdk = cli.__main__:main'],
+        'vnfsdk.validator': [
+            'aria = validator.aria_validator:AriaValidator'
+        ]
     },
 
     include_package_data=True,

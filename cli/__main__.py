@@ -22,15 +22,8 @@ from aria import install_aria_extensions
 import os
 import shutil
 import tempfile
-from aria.parser.loading import LiteralLocation
-from aria.parser.consumption import (
-    ConsumptionContext,
-    ConsumerChain,
-    Read,
-    Validate,
-    ServiceTemplate,
-    ServiceInstance
-)
+
+import validator
 
 def csar_create_func(namespace):
     csar.write(namespace.source,
@@ -48,16 +41,9 @@ def csar_validate_func(namespace):
         reader = csar.read(namespace.source,
                            workdir,
                            logging)
-        context = ConsumptionContext()
-        context.loading.prefixes += [os.path.join(reader.destination, 'definitions')]
-        context.presentation.location = LiteralLocation(reader.entry_definitions_yaml)
-        print reader.entry_definitions_yaml
-        chain = ConsumerChain(context, (Read, Validate, ServiceTemplate, ServiceInstance))
-        chain.consume()
-        if context.validation.dump_issues():
-            raise RuntimeError('Validation failed')
-        dumper = chain.consumers[-1]
-        dumper.dump()
+
+        driver = validator.get_validator(namespace.parser)
+        driver.validate(reader)
     finally:
         shutil.rmtree(workdir, ignore_errors=True)
 
@@ -104,6 +90,10 @@ def parse_args(args_list):
     csar_validate.add_argument(
         'source',
         help='CSAR file location')
+    csar_validate.add_argument(
+        '-p', '--parser',
+        default='aria',
+        help='use which csar parser to validate')
 
     return parser.parse_args(args_list)
 
