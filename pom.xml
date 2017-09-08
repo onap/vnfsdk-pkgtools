@@ -28,7 +28,7 @@ under the License.
     <groupId>org.onap.vnfsdk.pkgtools</groupId>
     <artifactId>vnf-sdk-pkgtools</artifactId>
 
-    <name>vnf-sdk-design-pkg</name>
+    <name>vnfsdk-pkgtools</name>
     <description>CSAR manipulation shared library with CLI</description>
 
     <build>
