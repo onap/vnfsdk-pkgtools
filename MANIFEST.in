@@ -1,3 +1,6 @@
 include COPYRIGHT
 include LICENSE
 include requirements.txt
+include ./src/veslibrary/ves_clibrary/evel/evel-library/libs/x86_64/libevel.so
+include ./src/veslibrary/ves_javalibrary/dist/VESLibrary.jar
+include ./src/veslibrary/ves_javalibrary/dist/dependencies-all.jar

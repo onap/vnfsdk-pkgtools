@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src_test"/>
+	<classpathentry kind="lib" path="build_time_libs/javassist-3.18.1-GA.jar"/>
+	<classpathentry kind="lib" path="build_time_libs/junit-4.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/javalite-common-1.4.13.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.6.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-simple-1.7.6.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/gs244f/Downloads/log4j-1.2.17/apache-log4j-1.2.17/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="C:/Users/gs244f/workspace/veslibrary/lib/javax.json-1.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

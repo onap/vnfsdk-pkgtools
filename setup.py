@@ -28,7 +28,10 @@ if sys.version_info >= (3, 0):
 
 root_dir = os.path.dirname(__file__)
 install_requires = []
-extras_require = {}
+extras_require = {  
+            'VESC' : ["build-essential"],
+            'VESJAVA' : ["openjdk-8-jre","openjdk-8-jdk","ant"]
+}
 
 with open(os.path.join(root_dir, 'requirements.txt')) as requirements:
     for requirement in requirements.readlines():
