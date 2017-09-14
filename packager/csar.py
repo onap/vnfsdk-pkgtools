@@ -28,8 +28,13 @@ META_FILE_VERSION_VALUE = '1.0'
 META_CSAR_VERSION_KEY = 'CSAR-Version'
 META_CSAR_VERSION_VALUE = '1.1'
 META_CREATED_BY_KEY = 'Created-By'
-META_CREATED_BY_VALUE = 'ARIA'
+META_CREATED_BY_VALUE = 'ONAP'
 META_ENTRY_DEFINITIONS_KEY = 'Entry-Definitions'
+META_ENTRY_MANIFEST_FILE_KEY = 'Entry-Manifest'
+META_ENTRY_HISTORY_FILE_KEY = 'Entry-Change-Log'
+META_ENTRY_TESTS_DIR_KEY = 'Entry-Tests'
+META_ENTRY_LICENSES_DIR_KEY = 'Entry-Licenses'
+
 BASE_METADATA = {
     META_FILE_VERSION_KEY: META_FILE_VERSION_VALUE,
     META_CSAR_VERSION_KEY: META_CSAR_VERSION_VALUE,
@@ -37,33 +42,92 @@ BASE_METADATA = {
 }
 
 
-def write(source, entry, destination, logger):
+def check_file_dir(root, entry, msg, check_for_non=False, check_dir=False):
+    path = os.path.join(root, entry)
+    if check_for_non:
+        ret = not os.path.exists(path)
+        error_msg = '{0} already exists. ' + msg
+    elif check_dir:
+        ret = os.path.isdir(path)
+        error_msg = '{0} is not an existing directory. ' + msg
+    else:
+        ret = os.path.isfile(path)
+        error_msg = '{0} is not an existing file. ' + msg
+    if not ret:
+        raise ValueError(error_msg.format(path))
+
+
+def write(source, entry, destination, logger, args):
     source = os.path.expanduser(source)
     destination = os.path.expanduser(destination)
-    entry_definitions = os.path.join(source, entry)
-    meta_file = os.path.join(source, META_FILE)
-    if not os.path.isdir(source):
-        raise ValueError('{0} is not a directory. Please specify the service template '
-                         'directory.'.format(source))
-    if not os.path.isfile(entry_definitions):
-        raise ValueError('{0} does not exists. Please specify a valid entry point.'
-                         .format(entry_definitions))
-    if os.path.exists(destination):
-        raise ValueError('{0} already exists. Please provide a path to where the CSAR should be '
-                         'created.'.format(destination))
-    if os.path.exists(meta_file):
-        raise ValueError('{0} already exists. This commands generates a meta file for you. Please '
-                         'remove the existing metafile.'.format(meta_file))
     metadata = BASE_METADATA.copy()
+
+    check_file_dir(root=source,
+                   entry='',
+                   msg='Please specify the service template directory.',
+                   check_dir=True)
+
+    check_file_dir(root=source,
+                   entry=entry,
+                   msg='Please specify a valid entry point.',
+                   check_dir=False)
     metadata[META_ENTRY_DEFINITIONS_KEY] = entry
+
+    check_file_dir(root='',
+                   entry=destination,
+                   msg='Please provide a path to where the CSAR should be created.',
+                   check_for_non=True)
+
+    check_file_dir(root=source,
+                   entry=META_FILE,
+                   msg='This commands generates a meta file for you. Please '
+                       'remove the existing metafile.',
+                   check_for_non=True)
+
+    if(args.manifest):
+        check_file_dir(root=source,
+                       entry=args.manifest,
+                       msg='Please specify a valid manifest file.',
+                       check_dir=False)
+        metadata[META_ENTRY_MANIFEST_FILE_KEY] = args.manifest
+
+    if(args.history):
+        check_file_dir(root=source,
+                       entry=args.history,
+                       msg='Please specify a valid change history file.',
+                       check_dir=False)
+        metadata[META_ENTRY_HISTORY_FILE_KEY] = args.history
+
+    if(args.tests):
+        check_file_dir(root=source,
+                       entry=args.tests,
+                       msg='Please specify a valid test directory.',
+                       check_dir=True)
+        metadata[META_ENTRY_TESTS_DIR_KEY] = args.tests
+
+    if(args.licenses):
+        check_file_dir(root=source,
+                       entry=args.licenses,
+                       msg='Please specify a valid license directory.',
+                       check_dir=True)
+        metadata[META_ENTRY_LICENSES_DIR_KEY] = args.licenses
+
     logger.debug('Compressing root directory to ZIP')
     with zipfile.ZipFile(destination, 'w', zipfile.ZIP_DEFLATED) as f:
-        for root, _, files in os.walk(source):
+        for root, dirs, files in os.walk(source):
             for file in files:
                 file_full_path = os.path.join(root, file)
                 file_relative_path = os.path.relpath(file_full_path, source)
                 logger.debug('Writing to archive: {0}'.format(file_relative_path))
                 f.write(file_full_path, file_relative_path)
+            # add empty dir
+            for dir in dirs:
+                dir_full_path = os.path.join(root, dir)
+                if len(os.listdir(dir_full_path)) == 0:
+                    dir_relative_path = os.path.relpath(dir_full_path, source) + os.sep
+                    logger.debug('Writing to archive: {0}'.format(dir_relative_path))
+                    f.write(dir_full_path + os.sep, dir_relative_path)
+
         logger.debug('Writing new metadata file to {0}'.format(META_FILE))
         f.writestr(META_FILE, yaml.dump(metadata, default_flow_style=False))
 
@@ -119,6 +183,22 @@ class _CSARReader(object):
         with open(os.path.join(self.destination, self.entry_definitions)) as f:
             return yaml.load(f)
 
+    @property
+    def entry_manifest_file(self):
+        return self.metadata.get(META_ENTRY_MANIFEST_FILE_KEY)
+
+    @property
+    def entry_history_file(self):
+        return self.metadata.get(META_ENTRY_HISTORY_FILE_KEY)
+
+    @property
+    def entry_tests_dir(self):
+        return self.metadata.get(META_ENTRY_TESTS_DIR_KEY)
+
+    @property
+    def entry_licenses_dir(self):
+        return self.metadata.get(META_ENTRY_LICENSES_DIR_KEY)
+
     def _extract(self):
         self.logger.debug('Extracting CSAR contents')
         if not os.path.exists(self.destination):
@@ -150,10 +230,44 @@ class _CSARReader(object):
         validate_key(META_CREATED_BY_KEY)
         validate_key(META_ENTRY_DEFINITIONS_KEY)
         self.logger.debug('CSAR entry definitions: {0}'.format(self.entry_definitions))
-        entry_definitions_path = os.path.join(self.destination, self.entry_definitions)
-        if not os.path.isfile(entry_definitions_path):
-            raise ValueError('The entry definitions {0} referenced by the metadata file does not '
-                             'exist.'.format(entry_definitions_path))
+        self.logger.debug('CSAR manifest file: {0}'.format(self.entry_manifest_file))
+        self.logger.debug('CSAR change history file: {0}'.format(self.entry_history_file))
+        self.logger.debug('CSAR tests directory: {0}'.format(self.entry_tests_dir))
+        self.logger.debug('CSAR licenses directory: {0}'.format(self.entry_licenses_dir))
+
+        check_file_dir(self.destination,
+                       self.entry_definitions,
+                       'The entry definitions {0} referenced by the metadata '
+                       'file does not exist.'.format(self.entry_definitions),
+                       check_dir=False)
+
+        if(self.entry_manifest_file):
+             check_file_dir(self.destination,
+                            self.entry_manifest_file,
+                            'The manifest file {0} referenced by the metadata '
+                            'file does not exist.'.format(self.entry_manifest_file),
+                            check_dir=False)
+
+        if(self.entry_history_file):
+             check_file_dir(self.destination,
+                            self.entry_history_file,
+                            'The change history file {0} referenced by the metadata '
+                            'file does not exist.'.format(self.entry_history_file),
+                            check_dir=False)
+
+        if(self.entry_tests_dir):
+             check_file_dir(self.destination,
+                            self.entry_tests_dir,
+                            'The test directory {0} referenced by the metadata '
+                            'file does not exist.'.format(self.entry_tests_dir),
+                            check_dir=True)
+
+        if(self.entry_licenses_dir):
+             check_file_dir(self.destination,
+                            self.entry_licenses_dir,
+                            'The license directory {0} referenced by the metadata '
+                            'file does not exist.'.format(self.entry_licenses_dir),
+                            check_dir=True)
 
     def _download(self, url, target):
         response = requests.get(url, stream=True)

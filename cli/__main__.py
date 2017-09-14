@@ -29,7 +29,8 @@ def csar_create_func(namespace):
     csar.write(namespace.source,
                         namespace.entry,
                         namespace.destination,
-                        logging)
+                        logging,
+                        args=namespace)
 def csar_open_func(namespace):
     csar.read(namespace.source,
                        namespace.destination,
@@ -74,6 +75,19 @@ def parse_args(args_list):
         '-d', '--destination',
         help='Output CSAR zip destination',
         required=True)
+    csar_create.add_argument(
+        '--manifest',
+        help='Manifest file relative to service template directory')
+    csar_create.add_argument(
+        '--history',
+        help='Change history file relative to service template directory')
+    csar_create.add_argument(
+        '--tests',
+        help='Directory containing test information, relative to service template directory')
+    csar_create.add_argument(
+        '--licenses',
+        help='Directory containing license information, relative to service template directory')
+
 
     csar_open = subparsers.add_parser('csar-open')
     csar_open.set_defaults(func=csar_open_func)
