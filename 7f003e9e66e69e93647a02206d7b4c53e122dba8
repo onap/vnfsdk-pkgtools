@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_cc2ae22b",
+        "filename": "MANIFEST.in",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 309
+      },
+      "writtenOn": "2017-09-15T02:21:34Z",
+      "side": 1,
+      "message": "no need to put ./ int the beginning.",
+      "range": {
+        "startLine": 4,
+        "startChar": 76,
+        "endLine": 4,
+        "endChar": 78
+      },
+      "revId": "7f003e9e66e69e93647a02206d7b4c53e122dba8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_8c1cda14",
+        "filename": "compile_ves.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 309
+      },
+      "writtenOn": "2017-09-15T02:21:34Z",
+      "side": 1,
+      "message": "where to use setup in this python module?",
+      "range": {
+        "startLine": 20,
+        "startChar": 23,
+        "endLine": 20,
+        "endChar": 28
+      },
+      "revId": "7f003e9e66e69e93647a02206d7b4c53e122dba8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_6c1bf61b",
+        "filename": "compile_ves.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 309
+      },
+      "writtenOn": "2017-09-15T02:21:34Z",
+      "side": 1,
+      "message": "where to use the above 3 variables?",
+      "range": {
+        "startLine": 31,
+        "startChar": 17,
+        "endLine": 31,
+        "endChar": 19
+      },
+      "revId": "7f003e9e66e69e93647a02206d7b4c53e122dba8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_ecdec63e",
+        "filename": "compile_ves.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 309
+      },
+      "writtenOn": "2017-09-15T02:21:34Z",
+      "side": 1,
+      "message": "I think \"cd ~/pkgtools\" won\u0027t work on other environment, my pkgtools directory is not under my ~/. :(",
+      "range": {
+        "startLine": 36,
+        "startChar": 98,
+        "endLine": 36,
+        "endChar": 100
+      },
+      "revId": "7f003e9e66e69e93647a02206d7b4c53e122dba8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_accf9e7e",
+        "filename": "setup.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 309
+      },
+      "writtenOn": "2017-09-15T02:21:34Z",
+      "side": 1,
+      "message": "This is the wrong usage of extra_require. extra_require specifies the optional python package dependencies, I believe the \u0027build-essential\u0027, \u0027openjdk-8-jre\u0027 are ubuntu pakcages, not python packages which can be found on pypi.",
+      "range": {
+        "startLine": 33,
+        "startChar": 61,
+        "endLine": 33,
+        "endChar": 63
+      },
+      "revId": "7f003e9e66e69e93647a02206d7b4c53e122dba8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
