@@ -21,8 +21,8 @@ under the License.
     <parent>
         <groupId>org.onap.oparent</groupId>
         <artifactId>oparent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-        <relativePath>../oparent</relativePath>
+        <version>1.1.0-SNAPSHOT</version>
+	<relativePath>../../oparent</relativePath>
     </parent>
 
     <groupId>org.onap.vnfsdk.pkgtools</groupId>
@@ -30,6 +30,11 @@ under the License.
 
     <name>vnfsdk-pkgtools</name>
     <description>CSAR manipulation shared library with CLI</description>
+    <properties>
+        <sonar.language>py</sonar.language>
+        <sonar.pluginName>Python</sonar.pluginName>
+	<sonar.inclusions>**/*.py</sonar.inclusions>
+    </properties>
 
     <build>
       <plugins>
