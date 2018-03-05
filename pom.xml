@@ -34,6 +34,7 @@ under the License.
         <sonar.language>py</sonar.language>
         <sonar.pluginName>Python</sonar.pluginName>
         <sonar.inclusions>**/*.py</sonar.inclusions>
+        <sonar.skip>false</sonar.skip>
     </properties>
 
     <build>
