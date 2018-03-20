@@ -27,11 +27,13 @@ under the License.
     </parent>
 
     <groupId>org.onap.vnfsdk.pkgtools</groupId>
-    <artifactId>vnf-sdk-pkgtools</artifactId>
+    <artifactId>vnfsdk-pkgtools</artifactId>
 
     <name>vnfsdk-pkgtools</name>
     <description>CSAR manipulation shared library with CLI</description>
     <properties>
+        <sonar.junit.reportsPath>xunit-results.xml</sonar.junit.reportsPath>
+        <sonar.python.coverage.reportPath>coverage.xml</sonar.python.coverage.reportPath>
         <sonar.language>py</sonar.language>
         <sonar.pluginName>Python</sonar.pluginName>
         <sonar.inclusions>**/*.py</sonar.inclusions>
