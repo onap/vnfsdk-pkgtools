@@ -32,11 +32,17 @@ under the License.
     <name>vnfsdk-pkgtools</name>
     <description>CSAR manipulation shared library with CLI</description>
     <properties>
+        <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+	<sonar.sources>cli,packager,validator</sonar.sources>
+        <sonar.tests>tests</sonar.tests>
         <sonar.junit.reportsPath>xunit-results.xml</sonar.junit.reportsPath>
         <sonar.python.coverage.reportPath>coverage.xml</sonar.python.coverage.reportPath>
         <sonar.language>py</sonar.language>
-        <sonar.pluginName>Python</sonar.pluginName>
-        <sonar.inclusions>**/*.py</sonar.inclusions>
+        <sonar.pluginName>python</sonar.pluginName>
+	<sonar.inclusions>**/**.py</sonar.inclusions>
+        <sonar.exclusions>**/tests/**,setup.py</sonar.exclusions>
+        <sonar.test.inclusions>**/tests/**.py</sonar.test.inclusions>
+        <sonar.test.exclusions>**/**.py,setup.py</sonar.test.exclusions>	
     </properties>
 
     <build>
