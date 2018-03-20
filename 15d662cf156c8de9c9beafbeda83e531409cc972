@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_f02aa18f",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 309
+      },
+      "writtenOn": "2018-03-20T23:11:47Z",
+      "side": 1,
+      "message": "I think it should be validator/**.py. I\u0027ll modify here directly.",
+      "range": {
+        "startLine": 41,
+        "startChar": 84,
+        "endLine": 41,
+        "endChar": 85
+      },
+      "revId": "15d662cf156c8de9c9beafbeda83e531409cc972",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
