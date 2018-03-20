@@ -38,10 +38,10 @@ under the License.
         <sonar.python.coverage.reportPath>coverage.xml</sonar.python.coverage.reportPath>
         <sonar.language>py</sonar.language>
         <sonar.pluginName>python</sonar.pluginName>
-        <sonar.inclusions>**/*.py</sonar.inclusions>
+        <sonar.inclusions>cli/**.py,packager/**.py,validator.**.py</sonar.inclusions>
 	<sonar.exclusions>**/tests/**,**/.tox/py27/**</sonar.exclusions>
         <sonar.test.inclusions>**/tests/**.py</sonar.test.inclusions>
-	<sonar.test.exclusions>**/**.py,setup.py,**/.tox/py27/**</sonar.test.exclusions>
+	<sonar.test.exclusions>setup.py,.tox/py27/**</sonar.test.exclusions>
     </properties>
 
     <build>
