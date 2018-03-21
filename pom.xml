@@ -33,6 +33,7 @@ under the License.
     <description>CSAR manipulation shared library with CLI</description>
     <properties>
         <sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
+        <sonar.sources>cli,packager,validator</sonar.sources>
         <sonar.tests>tests</sonar.tests>
         <sonar.junit.reportsPath>xunit-results.xml</sonar.junit.reportsPath>
         <sonar.python.coverage.reportPath>coverage.xml</sonar.python.coverage.reportPath>
