@@ -15,7 +15,7 @@
 #
 
 import pytest
-from cli import  __main__
+from vnfsdk_pkgtools.cli import  __main__
 
 def test_main(capsys):
     with pytest.raises(SystemExit):

@@ -25,7 +25,7 @@ from aria.parser.consumption import (
     ServiceInstance
 )
 
-import validator
+from vnfsdk_pkgtools import validator
 
 
 class AriaValidator(validator.ValidatorBase):

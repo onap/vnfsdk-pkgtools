@@ -1,3 +1,3 @@
 include COPYRIGHT
-include LICENSE
+include LICENSE.txt
 include requirements.txt

@@ -20,7 +20,7 @@ import os
 import tempfile
 import shutil
 
-from packager import csar
+from vnfsdk_pkgtools.packager import csar
 
 CSAR_RESOURCE_DIR = 'tests/resources/csar'
 CSAR_ENTRY_FILE = 'test_entry.yaml'

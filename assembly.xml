@@ -28,11 +28,9 @@ under the License.
                 <include>LICENSE</include>
                 <include>MANIFEST.in</include>
                 <include>Makefile</include>
-                <include>cli/**</include>
-                <include>packager/**</include>
+                <include>vnfsdk_pkgtools/**</include>
                 <include>requirements.txt</include>
                 <include>setup.py</include>
-                <include>validator/**</include>
             </includes>
             <excludes>
                 <exclude>**/*.pyc</exclude>

@@ -17,7 +17,7 @@
 #
 
 import os
-from setuptools import setup
+from setuptools import find_packages, setup
 import sys
 
 if sys.version_info < (2, 7):
@@ -47,16 +47,20 @@ with open(os.path.join(root_dir, 'requirements.txt')) as requirements:
         else:
             install_requires.append(requirement)
 
+version = { }
+with open(os.path.join(root_dir, 'vnfsdk_pkgtools/version.py')) as fp:
+    exec(fp.read(), version)
+
 setup(
     name='vnfsdk',
-    version='0.1',
-    description='VNF SDK CSAR package tool',
+    version=version['__version__'],
+    description='VNFSDK CSAR package tool',
+    long_description="VNFSDK CSAR package tool in ONAP",
     license='Apache License Version 2.0',
 
-    author='GigaSpaces',
-    author_email='info@gigaspaces.com',
+    author='ONAP',
 
-    url='http://onap.org/',
+    url='https://git.onap.org/vnfsdk/pkgtools',
 
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -67,27 +71,19 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: System :: Networking',
         'Topic :: System :: Systems Administration'],
 
-    packages=[
-        'packager',
-        'cli',
-        'validator'
-    ],
-
-    package_dir={
-        'packager': 'packager',
-        'cli': 'cli',
-        'validator': 'validator'
-    },
+    packages=find_packages(exclude=['tests*']),
 
     entry_points={
         'console_scripts': [
-            'vnfsdk = cli.__main__:main'],
-        'vnfsdk.validator': [
-            'aria = validator.aria_validator:AriaValidator'
+            'vnfsdk = vnfsdk_pkgtools.cli.__main__:main'],
+        'vnfsdk.pkgtools.validator': [
+            'aria = vnfsdk_pkgtools.validator.aria_validator:AriaValidator'
         ]
     },
 

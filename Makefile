@@ -14,9 +14,6 @@
 # under the License.
 #
 
-PACKAGER_CLI=cli
-PACKAGER_LIB=packager
-
 
 .PHONY: clean requirements
 .DEFAULT_GOAL = requirements
