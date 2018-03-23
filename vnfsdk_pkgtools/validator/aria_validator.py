@@ -15,7 +15,7 @@
 
 import os
 
-from aria.parser.loading import LiteralLocation
+from aria.parser.loading import UriLocation
 from aria.parser.consumption import (
     ConsumptionContext,
     ConsumerChain,
@@ -31,9 +31,10 @@ from vnfsdk_pkgtools import validator
 class AriaValidator(validator.ValidatorBase):
     def validate(self, reader):
         context = ConsumptionContext()
-        context.loading.prefixes += [os.path.join(reader.destination, 'definitions')]
-        context.presentation.location = LiteralLocation(reader.entry_definitions_yaml)
-        print reader.entry_definitions_yaml
+        service_template_path = os.path.join(reader.destination,
+                                             reader.entry_definitions)
+        context.presentation.location = UriLocation(service_template_path)
+        print(reader.entry_definitions_yaml)
         chain = ConsumerChain(context, (Read, Validate, ServiceTemplate, ServiceInstance))
         chain.consume()
         if context.validation.dump_issues():
