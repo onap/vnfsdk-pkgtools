@@ -1,5 +1,4 @@
-#
-# Copyright (c) 2017 GigaSpaces Technologies Ltd. All rights reserved.
+# Copyright (c) 2018 Intel Corp Inc. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -13,4 +12,22 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
+
+import hashlib
+import os
+
+def _hash_value_for_file(f, hash_function, block_size=2**20):
+    while True:
+        data = f.read(block_size)
+        if not data:
+            break
+        hash_function.update(data)
+
+    return hash_function.hexdigest()
+
+
+def cal_file_hash(root, path, algo):
+    with open(os.path.join(root, path), 'rb') as fp:
+        h = hashlib.new(algo)
+        return _hash_value_for_file(fp, h)
 
