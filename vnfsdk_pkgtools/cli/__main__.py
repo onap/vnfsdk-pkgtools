@@ -87,6 +87,10 @@ def parse_args(args_list):
     csar_create.add_argument(
         '--licenses',
         help='Directory containing license information, relative to service template directory')
+    csar_create.add_argument(
+        '--digest',
+        choices=['SHA256', 'SHA512'],
+        help='If present, means to check the file deigest in manifest;  compute the digest using the specified hash algorithm of all files in the csar package to be put into the manifest file')
 
 
     csar_open = subparsers.add_parser('csar-open')

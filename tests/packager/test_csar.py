@@ -27,7 +27,7 @@ CSAR_ENTRY_FILE = 'test_entry.yaml'
 CSAR_OUTPUT_FILE = 'output.csar'
 
 Args = collections.namedtuple('Args',
-        ['source', 'entry', 'manifest', 'history', 'tests', 'licenses'])
+        ['source', 'entry', 'manifest', 'history', 'tests', 'licenses', 'digest'])
 
 ARGS_MANIFEST = {
             'source': CSAR_RESOURCE_DIR,
@@ -36,7 +36,19 @@ ARGS_MANIFEST = {
             'history': 'ChangeLog.txt',
             'tests': 'Tests',
             'licenses': 'Licenses',
+            'digest': None
         }
+
+ARGS_MANIFEST_DIGEST = {
+            'source': CSAR_RESOURCE_DIR,
+            'entry': CSAR_ENTRY_FILE,
+            'manifest': 'test_entry.mf',
+            'history': 'ChangeLog.txt',
+            'tests': 'Tests',
+            'licenses': 'Licenses',
+            'digest': 'sha256'
+        }
+
 
 ARGS_NO_MANIFEST = {
             'source': CSAR_RESOURCE_DIR,
@@ -45,6 +57,7 @@ ARGS_NO_MANIFEST = {
             'history': None,
             'tests': None,
             'licenses': None,
+            'digest': None,
         }
 
 
@@ -55,7 +68,7 @@ def csar_write_test(args):
         csar.write(args.source, args.entry, csar_target_dir + '/' + CSAR_OUTPUT_FILE, logging, args)
         csar.read(csar_target_dir + '/' + CSAR_OUTPUT_FILE, csar_extract_dir, logging)
         assert filecmp.cmp(args.source + '/' + args.entry, csar_extract_dir + '/' + args.entry)
-        if(args.manifest):
+        if(args.manifest and not args.digest):
             assert filecmp.cmp(args.source + '/' + args.manifest,
                                csar_extract_dir + '/' + args.manifest)
         if(args.history):
@@ -76,3 +89,11 @@ def test_CSARWrite_manifest():
     if not os.path.exists(license_path):
         os.makedirs(license_path)
     csar_write_test(Args(**ARGS_MANIFEST))
+
+
+def test_CSARWrite_manifest_digest():
+    # Because git can not store emptry directory, we need to create manually here
+    license_path = ARGS_MANIFEST['source'] + '/' + ARGS_MANIFEST['licenses']
+    if not os.path.exists(license_path):
+        os.makedirs(license_path)
+    csar_write_test(Args(**ARGS_MANIFEST_DIGEST))

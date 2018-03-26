@@ -15,6 +15,7 @@
 
 from collections import namedtuple
 import os
+import tempfile
 
 import udatetime
 
@@ -158,7 +159,13 @@ class Manifest(object):
             ret += "Hash: %s\n" % digest[1]
         return ret
 
-    def update_to_file(self):
+    def update_to_file(self, temporary=False):
         content = self.return_as_string()
-        with open(os.path.join(self.root, self.path), 'w') as fp:
+        if temporary:
+            abs_path = tempfile.mktemp()
+        else:
+            abs_path = os.path.abspath(os.path.join(self.root, self.path))
+
+        with open(abs_path, 'w') as fp:
             fp.write(content)
+        return abs_path

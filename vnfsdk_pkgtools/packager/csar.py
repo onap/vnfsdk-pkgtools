@@ -21,6 +21,7 @@ import zipfile
 import requests
 from ruamel import yaml # @UnresolvedImport
 
+from vnfsdk_pkgtools.packager import manifest
 
 META_FILE = 'TOSCA-Metadata/TOSCA.meta'
 META_FILE_VERSION_KEY = 'TOSCA-Meta-File-Version'
@@ -90,6 +91,12 @@ def write(source, entry, destination, logger, args):
                        msg='Please specify a valid manifest file.',
                        check_dir=False)
         metadata[META_ENTRY_MANIFEST_FILE_KEY] = args.manifest
+        manifest_file = manifest.Manifest(source, args.manifest) 
+        manifest_file_full_path = os.path.join(source, args.manifest)
+    else:
+        manifest_file = None
+        manifest_file_full_path = None
+
 
     if(args.history):
         check_file_dir(root=source,
@@ -117,9 +124,14 @@ def write(source, entry, destination, logger, args):
         for root, dirs, files in os.walk(source):
             for file in files:
                 file_full_path = os.path.join(root, file)
-                file_relative_path = os.path.relpath(file_full_path, source)
-                logger.debug('Writing to archive: {0}'.format(file_relative_path))
-                f.write(file_full_path, file_relative_path)
+                # skip manifest file here in case we need to generate digest
+                if file_full_path!=manifest_file_full_path:
+                    file_relative_path = os.path.relpath(file_full_path, source)
+                    logger.debug('Writing to archive: {0}'.format(file_relative_path))
+                    f.write(file_full_path, file_relative_path)
+                    if manifest_file and args.digest:
+                        logger.debug('Update file digest: {0}'.format(file_relative_path))
+                        manifest_file.add_file(file_relative_path, args.digest)
             # add empty dir
             for dir in dirs:
                 dir_full_path = os.path.join(root, dir)
@@ -127,6 +139,13 @@ def write(source, entry, destination, logger, args):
                     dir_relative_path = os.path.relpath(dir_full_path, source) + os.sep
                     logger.debug('Writing to archive: {0}'.format(dir_relative_path))
                     f.write(dir_full_path + os.sep, dir_relative_path)
+
+        if manifest_file:
+            if args.digest:
+                logger.debug('Update manifest file to temporary file')
+                manifest_file_full_path = manifest_file.update_to_file(True)
+            logger.debug('Writing to archive: {0}'.format(args.manifest))
+            f.write(manifest_file_full_path, args.manifest)
 
         logger.debug('Writing new metadata file to {0}'.format(META_FILE))
         f.writestr(META_FILE, yaml.dump(metadata, default_flow_style=False))
@@ -149,6 +168,7 @@ class _CSARReader(object):
         self.source = os.path.expanduser(source)
         self.destination = os.path.expanduser(destination)
         self.metadata = {}
+        self.manifest = None
         try:
             if not os.path.exists(self.source):
                 raise ValueError('{0} does not exists. Please specify a valid CSAR path.'
@@ -247,6 +267,9 @@ class _CSARReader(object):
                             'The manifest file {0} referenced by the metadata '
                             'file does not exist.'.format(self.entry_manifest_file),
                             check_dir=False)
+             self.manifest = manifest.Manifest(self.destination,
+                                               self.entry_manifest_file)
+
 
         if(self.entry_history_file):
              check_file_dir(self.destination,
