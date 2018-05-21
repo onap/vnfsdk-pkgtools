@@ -76,6 +76,9 @@ def parse_args(args_list):
         help='Output CSAR zip destination',
         required=True)
     csar_create.add_argument(
+        '--helm',
+        help='Helm entry definition file relative to service template directory')
+    csar_create.add_argument(
         '--manifest',
         help='Manifest file relative to service template directory')
     csar_create.add_argument(

@@ -31,6 +31,7 @@ META_CSAR_VERSION_VALUE = '1.1'
 META_CREATED_BY_KEY = 'Created-By'
 META_CREATED_BY_VALUE = 'ONAP'
 META_ENTRY_DEFINITIONS_KEY = 'Entry-Definitions'
+META_ENTRY_HELM_DEFINITIONS_KEY = 'Entry-Helm-Definitions'
 META_ENTRY_MANIFEST_FILE_KEY = 'Entry-Manifest'
 META_ENTRY_HISTORY_FILE_KEY = 'Entry-Change-Log'
 META_ENTRY_TESTS_DIR_KEY = 'Entry-Tests'
@@ -84,6 +85,13 @@ def write(source, entry, destination, logger, args):
                    msg='This commands generates a meta file for you. Please '
                        'remove the existing metafile.',
                    check_for_non=True)
+
+    if(args.helm):
+        check_file_dir(root=source,
+                       entry=args.helm,
+                       msg='Please specify a valid Helm chart',
+                       check_dir=False)
+        metadata[META_ENTRY_HELM_DEFINITIONS_KEY] = args.helm
 
     if(args.manifest):
         check_file_dir(root=source,
