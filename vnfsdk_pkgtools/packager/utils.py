@@ -14,7 +14,12 @@
 #
 
 import hashlib
+from io import BytesIO
 import os
+import urlparse
+
+import requests
+
 
 def _hash_value_for_file(f, hash_function, block_size=2**20):
     while True:
@@ -27,7 +32,14 @@ def _hash_value_for_file(f, hash_function, block_size=2**20):
 
 
 def cal_file_hash(root, path, algo):
-    with open(os.path.join(root, path), 'rb') as fp:
-        h = hashlib.new(algo)
+    h = hashlib.new(algo)
+    if urlparse.urlparse(path).scheme:
+        r = requests.get(path)
+        if r.status_code != 200:
+            raise ValueError('Server at {0} returned a {1} status code'
+                             .format(path, r.status_code))
+        fp = BytesIO(r.content)
         return _hash_value_for_file(fp, h)
-
+    else:
+        with open(os.path.join(root, path), 'rb') as fp:
+            return _hash_value_for_file(fp, h)

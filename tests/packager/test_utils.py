@@ -26,3 +26,11 @@ def test_cal_file_hash(tmpdir):
     p.write(CONTENT)
     assert SHA512 == utils.cal_file_hash("", str(p), 'SHA512')
     assert SHA256 == utils.cal_file_hash(p.dirname, p.basename, 'sha256')
+
+def test_cal_file_hash_remote(mocker):
+    class FakeRequest(object):
+        def __init__(self, *args):
+            self.status_code = 200
+            self.content = CONTENT
+    mocker.patch('requests.get', new=FakeRequest)
+    assert SHA256 == utils.cal_file_hash("", "http://fake", 'sha256')

@@ -116,11 +116,9 @@ class Manifest(object):
                 if desc['Algorithm'] not in SUPPORTED_HASH_ALGO:
                     raise ManifestException("Unsupported hash algorithm: %s" % desc['Algorithm'])
                 # validate file digest hash
-                # TODO need to support remote file
-                if "://" not in desc['Source']:
-                    hash = utils.cal_file_hash(self.root, desc['Source'], desc['Algorithm'])
-                    if hash != desc['Hash']:
-                        raise ManifestException("Mismatched hash for file %s" % desc['Source'])
+                hash = utils.cal_file_hash(self.root, desc['Source'], desc['Algorithm'])
+                if hash != desc['Hash']:
+                    raise ManifestException("Mismatched hash for file %s" % desc['Source'])
                 # nothing is wrong, let's store this
                 self.digests[desc['Source']] = (desc['Algorithm'], desc['Hash'])
             elif key:
