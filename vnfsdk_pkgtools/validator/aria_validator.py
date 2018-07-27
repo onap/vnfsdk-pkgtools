@@ -15,6 +15,7 @@
 
 import os
 
+from aria import install_aria_extensions
 from aria.parser.loading import UriLocation
 from aria.parser.consumption import (
     ConsumptionContext,
@@ -29,6 +30,10 @@ from vnfsdk_pkgtools import validator
 
 
 class AriaValidator(validator.ValidatorBase):
+    def __init__(self):
+        super(AriaValidator, self).__init__()
+        install_aria_extensions()
+
     def validate(self, reader):
         context = ConsumptionContext()
         service_template_path = os.path.join(reader.destination,

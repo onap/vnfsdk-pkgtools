@@ -18,7 +18,6 @@ from vnfsdk_pkgtools.packager import csar
 import sys
 import logging
 import argparse
-from aria import install_aria_extensions
 import os
 import shutil
 import tempfile
@@ -53,8 +52,6 @@ def parse_args(args_list):
     """
     CLI entry point
     """
-    install_aria_extensions()
-
     parser = argparse.ArgumentParser(description='VNF SDK CSAR manipulation tool')
 
     subparsers = parser.add_subparsers(help='csar-create')
