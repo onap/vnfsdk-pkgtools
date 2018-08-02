@@ -13,7 +13,6 @@
 # under the License.
 #
 
-import logging
 import os
 
 from vnfsdk_pkgtools.packager import csar
@@ -22,6 +21,6 @@ from vnfsdk_pkgtools.validator import aria_validator
 CSAR_PATH = 'tests/resources/test_import.csar'
 
 def test_validate(tmpdir):
-    reader = csar._CSARReader(CSAR_PATH, str(tmpdir.mkdir('validate')), logging)
+    reader = csar._CSARReader(CSAR_PATH, str(tmpdir.mkdir('validate')))
     validator = aria_validator.AriaValidator()
     validator.validate(reader)

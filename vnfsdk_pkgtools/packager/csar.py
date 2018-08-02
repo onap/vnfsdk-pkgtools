@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import logging
 import os
 import pprint
 import tempfile
@@ -22,6 +23,8 @@ import requests
 from ruamel import yaml # @UnresolvedImport
 
 from vnfsdk_pkgtools.packager import manifest
+
+LOG = logging.getLogger(__name__)
 
 META_FILE = 'TOSCA-Metadata/TOSCA.meta'
 META_FILE_VERSION_KEY = 'TOSCA-Meta-File-Version'
@@ -58,7 +61,7 @@ def check_file_dir(root, entry, msg, check_for_non=False, check_dir=False):
         raise ValueError(error_msg.format(path))
 
 
-def write(source, entry, destination, logger, args):
+def write(source, entry, destination, args):
     source = os.path.expanduser(source)
     destination = os.path.expanduser(destination)
     metadata = BASE_METADATA.copy()
@@ -119,7 +122,7 @@ def write(source, entry, destination, logger, args):
                        check_dir=True)
         metadata[META_ENTRY_LICENSES_DIR_KEY] = args.licenses
 
-    logger.debug('Compressing root directory to ZIP')
+    LOG.debug('Compressing root directory to ZIP')
     with zipfile.ZipFile(destination, 'w', zipfile.ZIP_DEFLATED) as f:
         for root, dirs, files in os.walk(source):
             for file in files:
@@ -127,34 +130,33 @@ def write(source, entry, destination, logger, args):
                 # skip manifest file here in case we need to generate digest
                 if file_full_path!=manifest_file_full_path:
                     file_relative_path = os.path.relpath(file_full_path, source)
-                    logger.debug('Writing to archive: {0}'.format(file_relative_path))
+                    LOG.debug('Writing to archive: {0}'.format(file_relative_path))
                     f.write(file_full_path, file_relative_path)
                     if manifest_file and args.digest:
-                        logger.debug('Update file digest: {0}'.format(file_relative_path))
+                        LOG.debug('Update file digest: {0}'.format(file_relative_path))
                         manifest_file.add_file(file_relative_path, args.digest)
             # add empty dir
             for dir in dirs:
                 dir_full_path = os.path.join(root, dir)
                 if len(os.listdir(dir_full_path)) == 0:
                     dir_relative_path = os.path.relpath(dir_full_path, source) + os.sep
-                    logger.debug('Writing to archive: {0}'.format(dir_relative_path))
+                    LOG.debug('Writing to archive: {0}'.format(dir_relative_path))
                     f.write(dir_full_path + os.sep, dir_relative_path)
 
         if manifest_file:
             if args.digest:
-                logger.debug('Update manifest file to temporary file')
+                LOG.debug('Update manifest file to temporary file')
                 manifest_file_full_path = manifest_file.update_to_file(True)
-            logger.debug('Writing to archive: {0}'.format(args.manifest))
+            LOG.debug('Writing to archive: {0}'.format(args.manifest))
             f.write(manifest_file_full_path, args.manifest)
 
-        logger.debug('Writing new metadata file to {0}'.format(META_FILE))
+        LOG.debug('Writing new metadata file to {0}'.format(META_FILE))
         f.writestr(META_FILE, yaml.dump(metadata, default_flow_style=False))
 
 
 class _CSARReader(object):
 
-    def __init__(self, source, destination, logger):
-        self.logger = logger
+    def __init__(self, source, destination):
         if os.path.isdir(destination) and os.listdir(destination):
             raise ValueError('{0} already exists and is not empty. '
                              'Please specify the location where the CSAR '
@@ -220,22 +222,22 @@ class _CSARReader(object):
         return self.metadata.get(META_ENTRY_LICENSES_DIR_KEY)
 
     def _extract(self):
-        self.logger.debug('Extracting CSAR contents')
+        LOG.debug('Extracting CSAR contents')
         if not os.path.exists(self.destination):
             os.mkdir(self.destination)
         with zipfile.ZipFile(self.source) as f:
             f.extractall(self.destination)
-        self.logger.debug('CSAR contents successfully extracted')
+        LOG.debug('CSAR contents successfully extracted')
 
     def _read_metadata(self):
         csar_metafile = os.path.join(self.destination, META_FILE)
         if not os.path.exists(csar_metafile):
             raise ValueError('Metadata file {0} is missing from the CSAR'.format(csar_metafile))
-        self.logger.debug('CSAR metadata file: {0}'.format(csar_metafile))
-        self.logger.debug('Attempting to parse CSAR metadata YAML')
+        LOG.debug('CSAR metadata file: {0}'.format(csar_metafile))
+        LOG.debug('Attempting to parse CSAR metadata YAML')
         with open(csar_metafile) as f:
             self.metadata.update(yaml.load(f))
-        self.logger.debug('CSAR metadata:\n{0}'.format(pprint.pformat(self.metadata)))
+        LOG.debug('CSAR metadata:\n{0}'.format(pprint.pformat(self.metadata)))
 
     def _validate(self):
         def validate_key(key, expected=None):
@@ -249,11 +251,11 @@ class _CSARReader(object):
         validate_key(META_CSAR_VERSION_KEY, expected=META_CSAR_VERSION_VALUE)
         validate_key(META_CREATED_BY_KEY)
         validate_key(META_ENTRY_DEFINITIONS_KEY)
-        self.logger.debug('CSAR entry definitions: {0}'.format(self.entry_definitions))
-        self.logger.debug('CSAR manifest file: {0}'.format(self.entry_manifest_file))
-        self.logger.debug('CSAR change history file: {0}'.format(self.entry_history_file))
-        self.logger.debug('CSAR tests directory: {0}'.format(self.entry_tests_dir))
-        self.logger.debug('CSAR licenses directory: {0}'.format(self.entry_licenses_dir))
+        LOG.debug('CSAR entry definitions: {0}'.format(self.entry_definitions))
+        LOG.debug('CSAR manifest file: {0}'.format(self.entry_manifest_file))
+        LOG.debug('CSAR change history file: {0}'.format(self.entry_history_file))
+        LOG.debug('CSAR tests directory: {0}'.format(self.entry_tests_dir))
+        LOG.debug('CSAR licenses directory: {0}'.format(self.entry_licenses_dir))
 
         check_file_dir(self.destination,
                        self.entry_definitions,
@@ -297,12 +299,12 @@ class _CSARReader(object):
         if response.status_code != 200:
             raise ValueError('Server at {0} returned a {1} status code'
                              .format(url, response.status_code))
-        self.logger.info('Downloading {0} to {1}'.format(url, target))
+        LOG.info('Downloading {0} to {1}'.format(url, target))
         with open(target, 'wb') as f:
             for chunk in response.iter_content(chunk_size=8192):
                 if chunk:
                     f.write(chunk)
 
 
-def read(source, destination, logger):
-    return _CSARReader(source=source, destination=destination, logger=logger)
+def read(source, destination):
+    return _CSARReader(source=source, destination=destination)

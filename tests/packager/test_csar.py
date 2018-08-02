@@ -15,7 +15,6 @@
 #
 import collections
 import filecmp
-import logging
 import os
 import tempfile
 import shutil
@@ -65,8 +64,8 @@ def csar_write_test(args):
     csar_target_dir = tempfile.mkdtemp()
     csar_extract_dir = tempfile.mkdtemp()
     try:
-        csar.write(args.source, args.entry, csar_target_dir + '/' + CSAR_OUTPUT_FILE, logging, args)
-        csar.read(csar_target_dir + '/' + CSAR_OUTPUT_FILE, csar_extract_dir, logging)
+        csar.write(args.source, args.entry, csar_target_dir + '/' + CSAR_OUTPUT_FILE, args)
+        csar.read(csar_target_dir + '/' + CSAR_OUTPUT_FILE, csar_extract_dir)
         assert filecmp.cmp(args.source + '/' + args.entry, csar_extract_dir + '/' + args.entry)
         if(args.manifest and not args.digest):
             assert filecmp.cmp(args.source + '/' + args.manifest,

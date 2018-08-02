@@ -28,19 +28,18 @@ def csar_create_func(namespace):
     csar.write(namespace.source,
                         namespace.entry,
                         namespace.destination,
-                        logging,
                         args=namespace)
+
 def csar_open_func(namespace):
     csar.read(namespace.source,
-                       namespace.destination,
-                       logging)
+                       namespace.destination)
+
 def csar_validate_func(namespace):
     workdir = tempfile.mkdtemp()
     try:
         reader = None
         reader = csar.read(namespace.source,
-                           workdir,
-                           logging)
+                           workdir)
 
         driver = validator.get_validator(namespace.parser)
         driver.validate(reader)
@@ -53,15 +52,15 @@ def parse_args(args_list):
     CLI entry point
     """
     parser = argparse.ArgumentParser(description='VNF SDK CSAR manipulation tool')
-
-    subparsers = parser.add_subparsers(help='csar-create')
-    csar_create = subparsers.add_parser('csar-create')
-    csar_create.set_defaults(func=csar_create_func)
-    csar_create.add_argument('-v', '--verbose',
+    parser.add_argument('-v', '--verbose',
             dest='verbosity',
             action='count',
             default=0,
             help='Set verbosity level (can be passed multiple times)')
+
+    subparsers = parser.add_subparsers(help='csar-create')
+    csar_create = subparsers.add_parser('csar-create')
+    csar_create.set_defaults(func=csar_create_func)
     csar_create.add_argument(
         'source',
         help='Service template directory')
@@ -112,8 +111,22 @@ def parse_args(args_list):
 
     return parser.parse_args(args_list)
 
+
+def init_logging(args):
+    verbosity = [logging.WARNING, logging.INFO, logging.DEBUG]
+
+    logging.basicConfig()
+    logger = logging.getLogger('vnfsdk_pkgtools')
+    if args.verbosity >= len(verbosity):
+        verbose = verbosity[-1]
+    else:
+        verbose = verbosity[args.verbosity]
+    logger.setLevel(verbose)
+
+
 def main():
     args = parse_args(sys.argv[1:])
+    init_logging(args)
     args.func(args)
 
 

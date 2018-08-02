@@ -13,7 +13,6 @@
 # under the License.
 #
 
-import logging
 import os
 
 from vnfsdk_pkgtools.packager import csar
@@ -22,7 +21,7 @@ from vnfsdk_pkgtools.validator import toscaparser_validator
 CSAR_PATH = 'tests/resources/test_import.csar'
 
 def test_validate(tmpdir):
-    reader = csar._CSARReader(CSAR_PATH, str(tmpdir.mkdir('validate')), logging)
+    reader = csar._CSARReader(CSAR_PATH, str(tmpdir.mkdir('validate')))
     validator = toscaparser_validator.ToscaparserValidator()
     validator.validate(reader)
     assert hasattr(validator, 'tosca')
