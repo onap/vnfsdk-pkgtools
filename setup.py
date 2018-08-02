@@ -85,7 +85,8 @@ setup(
         'console_scripts': [
             'vnfsdk = vnfsdk_pkgtools.cli.__main__:main'],
         'vnfsdk.pkgtools.validator': [
-            'aria = vnfsdk_pkgtools.validator.aria_validator:AriaValidator [aria]'
+            'aria = vnfsdk_pkgtools.validator.aria_validator:AriaValidator [aria]',
+            'toscaparser = vnfsdk_pkgtools.validator.toscaparser_validator:ToscaparserValidator',
         ]
     },
 

@@ -107,7 +107,7 @@ def parse_args(args_list):
         help='CSAR file location')
     csar_validate.add_argument(
         '-p', '--parser',
-        default='aria',
+        default='toscaparser',
         help='use which csar parser to validate')
 
     return parser.parse_args(args_list)
