@@ -38,7 +38,7 @@ class ValidatorBase(object):
     """Base class for validators."""
 
     def __init__(self):
-        pass
+        self.tosca = None
 
 
     @abc.abstractmethod

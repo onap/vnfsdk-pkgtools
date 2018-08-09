@@ -1,0 +1,267 @@
+---
+metadata:
+  version: "1.0"
+schemas:
+  # schema name
+  vduCpuRequirements:
+      # hpa key name
+      cpuModelSpecificationBinding:
+        # json encoded key name: reg expression for the valid value
+        schema-version: &any r'.*'
+        schema-location: *any
+        platform-id: &generic r'generic'
+        mandatory: &bool r'true|false|TRUE|FALSE|True|False'
+        configuration-value: r'strictBinding|equalOrBetterBinding'
+      instructionSetRequirements:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      simultaneousMultiThreading:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'enabled|disabled'
+      hypervisorConfiguration:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      computeRas:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'pciDetectedAndCorrectedErrors|pciDetectedAndUncorrectedErrors'
+      cpuModel:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      directIoAccessToCache:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      accelerator:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      measuredLaunchEnvironment:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      secureEnclave:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      numVirtualCpu:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'\d+'
+      virtualCpuClock:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'\d+\w*(Hz|kHz|MHz|GHz)'
+      logicalCpuPinningPolicy:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'dedicated|shared'
+      logicalCpuThreadPinningPolicy:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'require|isolate|prefer'
+  vduMemRequirements:
+      memoryPageSize:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'\d+\w*(B|kB|KB|KiB|MB|MiB|GB|GiB|TB|TiB)'
+      numberOfPages:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'\d+'
+      memoryAllocationPolicy:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'strictLocalAffinity|preferredLocalAffinity'
+      memoryType:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      memorySpeed:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      memoryRas:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      memoryBandwidth:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'\d+'
+      processorCacheAllocationType:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      processorCacheAllocationSize:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+  vduStorageRequirements:
+      storageIops:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'\d+'
+      storageResilencyMechanism:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'erasure|tripleReplication'
+      processorCacheAllocationSize:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      processorCacheAllocationSize:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+  logicalNodeComputeMemoryRequirements:
+      numberCpu:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'\d+'
+      localNumaMemorySize:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'\d+\w*(B|kB|KB|KiB|MB|MiB|GB|GiB|TB|TiB)'
+  logicalNodeIoRequirements:
+      pciVendorId:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      pciDeviceId:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      pciNumDevices:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'\d+'
+      pciAddress:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      pciDeviceLocalToNumaNode:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'required|notRequired'
+  networkInterfaceRequirements:
+      nicFeature:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      dataProcessingAccelerationLibray:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'DPDK'
+      dataProcessingAccelerationLibrayVersion:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: *any
+      interfaceType:
+        schema-version: *any
+        schema-location: *any
+        platform-id: *generic
+        mandatory: *bool
+        configuration-value: r'virtio|PCI-Passthrough|SR-IOV|E1000|RTL8139|PCNET'
+mappings:
+# mapping between property value of a tosca node type and the valid hpa schema
+#   type: tosca node type
+#   key: prop1##prop2##...##propN
+#          Property hierachy within that node type. Prefix of '(capability:)'
+#          in propI means the value is from capability instead of property.
+#          Suffix '[] in propI means the value is a list of propI+1.
+#   schema: schema defined in the above schemas section
+  - type: tosca.nodes.nfv.Vdu.Compute
+    key: capability:virtual_compute##logical_node##logical_node_requirements
+    schema: logicalNodeComputeMemoryRequirements
+  - type: tosca.nodes.nfv.Vdu.Compute
+    key: capability:virtual_compute##virtual_cpu##vdu_cpu_requirements
+    schema: vduCpuRequirements
+  - type: tosca.nodes.nfv.Vdu.Compute
+    key: capability:virtual_compute##virtual_memory##vdu_memory_requirements
+    schema: vduCpuRequirements
+  - type: tosca.nodes.nfv.Vdu.VirtualStorage
+    key: vdu_storage_requirements
+    schema: vduStorageRequirements
+  - type: tosca.nodes.nfv.VduCp
+    key: virtual_network_interface_requirements[]##network_interface_requirements##logical_node_requirements
+    schema: networkInterfaceRequirements
+  - type: tosca.nodes.nfv.VduCp
+    key: virtual_network_interface_requirements[]##nic_io_requirements##logical_node_requirements
+    schema: logicalNodeIoRequirements

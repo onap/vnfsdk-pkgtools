@@ -1,4 +1,4 @@
-ruamel.yaml<0.16
+ruamel.yaml<0.15
 requests>=2.3.0
 #apache-ariatosca==0.1.1
 stevedore >= 1.9.0

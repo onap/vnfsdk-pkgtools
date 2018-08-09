@@ -1,3 +1,5 @@
 include COPYRIGHT
 include LICENSE.txt
 include requirements.txt
+include vnfsdk_pkgtools/validator/*.yaml
+prune tests/

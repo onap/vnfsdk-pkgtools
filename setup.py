@@ -80,6 +80,7 @@ setup(
         'Topic :: System :: Systems Administration'],
 
     packages=find_packages(exclude=['tests*']),
+    package_data={'vnfsdk_pkgtools.validator': ['*.yaml']},
 
     entry_points={
         'console_scripts': [

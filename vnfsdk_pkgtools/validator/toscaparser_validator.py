@@ -15,18 +15,44 @@
 
 import logging
 import os
+import pkg_resources
 
 from toscaparser.common.exception import ValidationError
 from toscaparser.tosca_template import ToscaTemplate
 
 from vnfsdk_pkgtools import validator
+from vnfsdk_pkgtools.validator import utils
 
 LOG = logging.getLogger(__name__)
+
+
+class HpaSchemaDefError(ValueError):
+    pass
 
 
 class ToscaparserValidator(validator.ValidatorBase):
     def __init__(self):
         super(ToscaparserValidator, self).__init__()
+        self._load_hpa_definition()
+
+    def _load_hpa_definition(self):
+        conf = pkg_resources.resource_filename(__name__, "hpa.yaml")
+        defs = utils.load_definitions(conf, {})
+        self.hpa_schema_version = defs.get('metadata', {}).get('version')
+        self.hpa_schemas = defs.get('schemas', {})
+        self.hpa_mappings = defs.get('mappings', [])
+        #validate schema defined in hpa.yaml is correct
+        if not self.hpa_schema_version:
+            msg = "No defined version in metadata"
+            raise HpaSchemaDefError(msg)
+        for mapping in self.hpa_mappings:
+            schema = mapping.get('schema')
+            if schema not in self.hpa_schemas:
+                msg = "schema %s not found in hpa schema definitions" % schema
+                raise HpaSchemaDefError(msg)
+            if not mapping.get('type') or not mapping.get('key'):
+                msg = "type or key not defined in hpa mappings"
+                raise HpaSchemaDefError(msg)
 
     def validate(self, reader):
         entry_path = os.path.join(reader.destination,
@@ -40,3 +66,5 @@ class ToscaparserValidator(validator.ValidatorBase):
         except ValidationError as e:
             LOG.error(e.message)
             raise e
+
+        print self.tosca
