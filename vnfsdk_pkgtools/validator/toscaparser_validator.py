@@ -13,9 +13,12 @@
 # under the License.
 #
 
+import functools
+import json
 import logging
 import os
 import pkg_resources
+import re
 
 from toscaparser.common.exception import ValidationError
 from toscaparser.tosca_template import ToscaTemplate
@@ -27,6 +30,10 @@ LOG = logging.getLogger(__name__)
 
 
 class HpaSchemaDefError(ValueError):
+    pass
+
+
+class HpaValueError(ValueError):
     pass
 
 
@@ -66,5 +73,95 @@ class ToscaparserValidator(validator.ValidatorBase):
         except ValidationError as e:
             LOG.error(e.message)
             raise e
+        self.validate_hpa()
 
-        print self.tosca
+    def is_type(self, node, tosca_type):
+        if node is None:
+            return False
+        elif node.type == tosca_type:
+            return True
+        else:
+            return self.is_type(node.parent_type, tosca_type)
+
+    def extract_value(self, node, key):
+        if node is None:
+            return None
+
+        (cur_key, _, pending) = key.partition('##')
+
+        prefix = None
+        prop = cur_key
+        if ':' in cur_key:
+            (prefix, prop) = cur_key.split(':', 1)
+        if prefix == 'capability':
+            getter = getattr(node, 'get_capability', None)
+            if not getter:
+                raise HpaSchemaDefError("not find capability %s" % prop)
+        elif prefix == 'property' or prefix is None:
+            getter = getattr(node, 'get_property_value', None)
+            if not getter and isinstance(node, dict):
+                getter = getattr(node, 'get')
+        else:
+            raise HpaSchemaDefError("unknown prefix in mapping "
+                                    "key %s" % cur_key)
+        value = getter(prop)
+
+        if not pending:
+            return value
+        elif isinstance(value, list):
+            return list(map(functools.partial(self.extract_value,
+                                              key=pending),
+                            value))
+        else:
+            return self.extract_value(value, pending)
+
+    @staticmethod
+    def validate_value(refkey, hpa_schema, value):
+        if value is None:
+            return
+        if not isinstance(value, dict):
+            msg = "node %s: value %s is not a map of string"
+            raise HpaValueError(msg % (refkey, value))
+        for (key, hpa_value) in value.iteritems():
+            if key not in hpa_schema:
+                msg = "node %s: %s is NOT a valid HPA key"
+                raise HpaValueError(msg  % (refkey, key))
+            try:
+                hpa_dict = json.loads(hpa_value)
+            except:
+                msg = "node %s, HPA key %s: %s is NOT a valid json encoded string"
+                raise HpaValueError(msg % (refkey, key, hpa_value.encode('ascii', 'replace')))
+            if not isinstance(hpa_dict, dict):
+                msg = "node %s, HPA key %s: %s is NOT a valid json encoded string of dict"
+                raise HpaValueError(msg % (refkey, key, hpa_value.encode('ascii', 'replace')))
+            for (attr, val) in hpa_dict.iteritems():
+                if attr not in hpa_schema[key]:
+                    msg = "node %s, HPA key %s: %s is NOT valid HPA attribute"
+                    raise HpaValueError(msg % (refkey, key, attr))
+                attr_schema = hpa_schema[key][attr]
+                if not re.match(attr_schema, str(val)):
+                    msg = ("node %s, HPA key %s, attr %s: %s is not a valid HPA "
+                          "attr value, expected re pattern is %s")
+                    raise HpaValueError(msg % (refkey, key, attr, val.encode('ascii','replace'), attr_schema))
+
+    def validate_hpa_value(self, refkey, hpa_schema, values):
+        if isinstance(values, list):
+            for value in values:
+                self.validate_value(refkey, hpa_schema, value)
+        elif isinstance(values, dict):
+            self.validate_value(refkey, hpa_schema, values)
+
+    def validate_hpa(self):
+        for node in getattr(self.tosca, 'nodetemplates', []):
+            for mapping in self.hpa_mappings:
+                if self.is_type(node, mapping['type']):
+                    value = self.extract_value(node, mapping['key'])
+                    if value:
+                        refkey = node.name + '->' + mapping['key']
+                        LOG.debug("Checking HPA values %s of node %s "
+                                  "against schema %s", value, refkey, mapping['schema'])
+                        self.validate_hpa_value(refkey,
+                                                self.hpa_schemas[mapping['schema']],
+                                                value)
+
+
