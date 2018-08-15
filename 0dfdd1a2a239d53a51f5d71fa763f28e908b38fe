@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_5569d1f7",
+        "filename": "vnfsdk_pkgtools/validator/toscaparser_validator.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 309
+      },
+      "writtenOn": "2018-08-15T06:08:56Z",
+      "side": 1,
+      "message": "1) node.parent_type is the type of the parent node.\n2) yes. All tosca root node will be same type \u0027tosca.nodes.Root\u0027.\n3) no, since root node\u0027s parent_type will be None.",
+      "parentUuid": "1a76adc5_d51de110",
+      "range": {
+        "startLine": 84,
+        "startChar": 32,
+        "endLine": 84,
+        "endChar": 48
+      },
+      "revId": "0dfdd1a2a239d53a51f5d71fa763f28e908b38fe",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_b58945cc",
         "filename": "vnfsdk_pkgtools/validator/toscaparser_validator.py",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-08-15T05:41:32Z",
       "side": 1,
       "message": "Will we definitely have getter !\u003d None here?",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 45
+      },
+      "revId": "0dfdd1a2a239d53a51f5d71fa763f28e908b38fe",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_f56d7d05",
+        "filename": "vnfsdk_pkgtools/validator/toscaparser_validator.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 309
+      },
+      "writtenOn": "2018-08-15T06:08:56Z",
+      "side": 1,
+      "message": "Yes. Python dict type will always have the method \u0027get\u0027.",
+      "parentUuid": "1a76adc5_b58945cc",
       "range": {
         "startLine": 103,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_d55ba152",
+        "filename": "vnfsdk_pkgtools/validator/toscaparser_validator.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 309
+      },
+      "writtenOn": "2018-08-15T06:08:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a76adc5_3561b539",
+      "range": {
+        "startLine": 123,
+        "startChar": 28,
+        "endLine": 123,
+        "endChar": 33
+      },
+      "revId": "0dfdd1a2a239d53a51f5d71fa763f28e908b38fe",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_754e4dc3",
         "filename": "vnfsdk_pkgtools/validator/toscaparser_validator.py",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2018-08-15T05:41:32Z",
       "side": 1,
       "message": "Move this check to validate_hpa_value since it\u0027s already checked for the dict value case (L151,152)?",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 54
+      },
+      "revId": "0dfdd1a2a239d53a51f5d71fa763f28e908b38fe",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_354bf588",
+        "filename": "vnfsdk_pkgtools/validator/toscaparser_validator.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 309
+      },
+      "writtenOn": "2018-08-15T06:08:56Z",
+      "side": 1,
+      "message": "We still need this. It\u0027s possible that this func is called from Line 150.",
+      "parentUuid": "1a76adc5_754e4dc3",
       "range": {
         "startLine": 122,
         "startChar": 0,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_d57401d1",
+        "filename": "vnfsdk_pkgtools/validator/toscaparser_validator.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 309
+      },
+      "writtenOn": "2018-08-15T06:08:56Z",
+      "side": 1,
+      "message": "yes. Though very unlikely, it is still possible the vnf provider put a valid json encoded string which will not be decoded as a dict here.",
+      "parentUuid": "1a76adc5_15eef988",
+      "range": {
+        "startLine": 134,
+        "startChar": 0,
+        "endLine": 136,
+        "endChar": 94
+      },
+      "revId": "0dfdd1a2a239d53a51f5d71fa763f28e908b38fe",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_153b593b",
         "filename": "vnfsdk_pkgtools/validator/toscaparser_validator.py",
         "patchSetId": 1
@@ -128,6 +248,30 @@
       "writtenOn": "2018-08-15T05:41:32Z",
       "side": 1,
       "message": "nit: alignment.",
+      "range": {
+        "startLine": 165,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 50
+      },
+      "revId": "0dfdd1a2a239d53a51f5d71fa763f28e908b38fe",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_b55e2544",
+        "filename": "vnfsdk_pkgtools/validator/toscaparser_validator.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 309
+      },
+      "writtenOn": "2018-08-15T06:08:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a76adc5_153b593b",
       "range": {
         "startLine": 165,
         "startChar": 0,
