@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_3519b588",
+        "filename": "requirements.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 309
+      },
+      "writtenOn": "2018-08-15T06:13:53Z",
+      "side": 1,
+      "message": "Below is an excerpt from ruamel.yaml official doc:\n\nStarting with version 0.15.0 the way YAML files are loaded and dumped is changing. Currently existing functionality will throw a warning before being changed/removed.\n\nWe cap this version to \u003c0.15 for api compatibility.",
+      "parentUuid": "1a76adc5_550a318b",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 16
+      },
+      "revId": "4e3368b279970e4244addbafbf650b316255d69c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_35ea1510",
         "filename": "tests/validator/test_validate_utils.py",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2018-08-15T05:41:23Z",
       "side": 1,
       "message": "nit: file name test_utils.py?",
+      "revId": "4e3368b279970e4244addbafbf650b316255d69c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_f53b3de9",
+        "filename": "tests/validator/test_validate_utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 309
+      },
+      "writtenOn": "2018-08-15T06:13:53Z",
+      "side": 1,
+      "message": "Pytest will save the coverage report indexed by python module file name. Since we already have another file with the same name test_utils.py, we have to use a different file name here. Otherwise, pytest framework will report an error.",
+      "parentUuid": "1a76adc5_35ea1510",
       "revId": "4e3368b279970e4244addbafbf650b316255d69c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
