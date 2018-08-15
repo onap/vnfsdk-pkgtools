@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_550a318b",
+        "filename": "requirements.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3641
+      },
+      "writtenOn": "2018-08-15T05:41:23Z",
+      "side": 1,
+      "message": "Why are we limiting ruamel.yaml version to 0.15?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 16
+      },
+      "revId": "4e3368b279970e4244addbafbf650b316255d69c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_35ea1510",
+        "filename": "tests/validator/test_validate_utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3641
+      },
+      "writtenOn": "2018-08-15T05:41:23Z",
+      "side": 1,
+      "message": "nit: file name test_utils.py?",
+      "revId": "4e3368b279970e4244addbafbf650b316255d69c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
