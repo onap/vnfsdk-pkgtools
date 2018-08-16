@@ -16,6 +16,24 @@
       "revId": "9f629ff62c270fd3771c381f78aa36f473e65bb5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_efe7e13e",
+        "filename": "vnfsdk_pkgtools/validator/hpa.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 309
+      },
+      "writtenOn": "2018-08-16T23:17:03Z",
+      "side": 1,
+      "message": "@Victor, the HPA related properties are already defined in R2 DM as well as part of SOL-001. This patch is meant to validate those properties\u0027 key/value pairs. These detailed key/value pairs are not defined by R2/R3 DM, but defined by an additional IFA011 and IFA014 model registry. I think Alex have reached the agreement when defining the R2 DM with modeling subcommittee about this DM/model registry separation.\n\nThis is the technical debt we brought from Beijing release.",
+      "parentUuid": "1a76adc5_7ef705f6",
+      "revId": "9f629ff62c270fd3771c381f78aa36f473e65bb5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
