@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_7ef705f6",
+        "filename": "vnfsdk_pkgtools/validator/hpa.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 39
+      },
+      "writtenOn": "2018-08-16T13:24:38Z",
+      "side": 1,
+      "message": "Since these HPA related features are not included by the R3 DM, may I suggest you guys ask a time-slot on modeling subcommittee meeting to review this.",
+      "revId": "9f629ff62c270fd3771c381f78aa36f473e65bb5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
