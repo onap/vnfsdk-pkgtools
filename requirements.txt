@@ -1,6 +1,5 @@
 ruamel.yaml<0.15
 requests>=2.3.0
-#apache-ariatosca==0.1.1
-stevedore >= 1.9.0
+stevedore>=1.9.0
 udatetime<1.0,>=0.0.16
 nfv-toscaparser<2.0,>=1.0.1

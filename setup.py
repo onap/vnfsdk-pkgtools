@@ -47,8 +47,6 @@ with open(os.path.join(root_dir, 'requirements.txt')) as requirements:
         else:
             install_requires.append(requirement)
 
-extras_require['aria'] = 'apache-ariatosca==0.1.1'
-
 version = { }
 with open(os.path.join(root_dir, 'vnfsdk_pkgtools/version.py')) as fp:
     exec(fp.read(), version)
@@ -86,7 +84,6 @@ setup(
         'console_scripts': [
             'vnfsdk = vnfsdk_pkgtools.cli.__main__:main'],
         'vnfsdk.pkgtools.validator': [
-            'aria = vnfsdk_pkgtools.validator.aria_validator:AriaValidator [aria]',
             'toscaparser = vnfsdk_pkgtools.validator.toscaparser_validator:ToscaparserValidator',
         ]
     },
