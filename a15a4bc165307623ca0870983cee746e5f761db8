@@ -1,0 +1,7 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+2: Kailun Qin <kailun.qin@intel.com>
+Submitted-by: Kailun Qin <kailun.qin@intel.com>
+Submitted-at: Thu, 23 Aug 2018 07:44:05 +0000
+Reviewed-on: https://gerrit.onap.org/r/61953
+Project: vnfsdk/pkgtools
+Branch: refs/heads/master
