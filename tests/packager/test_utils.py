@@ -14,6 +14,9 @@
 #
 
 import os
+import subprocess
+
+import pytest
 
 from vnfsdk_pkgtools.packager import utils
 
@@ -34,3 +37,26 @@ def test_cal_file_hash_remote(mocker):
             self.content = CONTENT
     mocker.patch('requests.get', new=FakeRequest)
     assert SHA256 == utils.cal_file_hash("", "http://fake", 'sha256')
+
+
+MSG_FILE  = "tests/resources/signature/manifest.mf"
+CERT_FILE = "tests/resources/signature/test.crt"
+KEY_FILE  = "tests/resources/signature/test.key"
+
+def test_sign_verify_pairwise():
+    cms = utils.sign(MSG_FILE, CERT_FILE, KEY_FILE)
+    # We can't examine the exact content of cms because it contains timestamp
+    assert "---BEGIN CMS---" in cms
+    assert "---END CMS---" in cms
+    utils.verify(MSG_FILE, CERT_FILE, cms, no_verify_cert=True)
+
+
+def test_verify_bad(tmpdir):
+    cms = utils.sign(MSG_FILE, CERT_FILE, KEY_FILE)
+    
+    p = tmpdir.join("file_msg.txt")
+    p.write("BAD")
+    
+    with pytest.raises(subprocess.CalledProcessError):
+        utils.verify(str(p), CERT_FILE, cms, no_verify_cert=True)
+    
