@@ -224,7 +224,7 @@ class _CSARReader(object):
     @property
     def entry_definitions_yaml(self):
         with open(os.path.join(self.destination, self.entry_definitions)) as f:
-            return yaml.load(f)
+            return yaml.safe_load(f)
 
     @property
     def entry_manifest_file(self):
@@ -261,7 +261,7 @@ class _CSARReader(object):
         LOG.debug('CSAR metadata file: {0}'.format(csar_metafile))
         LOG.debug('Attempting to parse CSAR metadata YAML')
         with open(csar_metafile) as f:
-            self.metadata.update(yaml.load(f))
+            self.metadata.update(yaml.safe_load(f))
         LOG.debug('CSAR metadata:\n{0}'.format(pprint.pformat(self.metadata)))
 
     def _validate(self, no_verify_cert):
