@@ -123,9 +123,12 @@ class Manifest(object):
                 self.digests[desc['Source']] = (desc['Algorithm'], desc['Hash'])
             elif key:
                 raise ManifestException("Unknown key in line '%s:%s'" % (key, value))
+            elif '--BEGIN CMS--' in remain:
+                if '--END CMS--' not in block[-1]:
+                    raise ManifestException("Can NOT find end of sigature block")
+                self.signature = remain + '\n' + '\n'.join(block)
             else:
-                # TODO signature block
-                pass
+                raise ManifestException("Unknown content: '%s'" % remain)
 
         if not self.metadata:
             raise ManifestException("No metadata")
@@ -155,6 +158,10 @@ class Manifest(object):
             ret += "Source: %s\n" % key
             ret += "Algorithm: %s\n" % digest[0]
             ret += "Hash: %s\n" % digest[1]
+        # signature
+        if  self.signature:
+            ret += "\n"
+            ret += self.signature
         return ret
 
     def update_to_file(self, temporary=False):
@@ -167,3 +174,24 @@ class Manifest(object):
         with open(abs_path, 'w') as fp:
             fp.write(content)
         return abs_path
+
+    def save_to_temp_without_cms(self):
+        # we need to strip cms block with out changing the order of the
+        # file digest content before we verify the signature
+        tmpfile = tempfile.NamedTemporaryFile(delete=False)
+        skip = False
+        lines = []
+        with open(os.path.join(self.root, self.path),'rU') as fp:
+            for line in fp:
+                if '--BEGIN CMS--' in line:
+                    skip = True
+                elif '--END CMS--' in line:
+                    skip = False
+                elif not skip:
+                    lines.append(line)
+        # strip trailing empty lines
+        content = ''.join(lines).rstrip(' \n\t')
+        content += '\n'
+        tmpfile.write(content)
+        tmpfile.close()
+        return tmpfile.name

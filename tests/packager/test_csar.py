@@ -26,7 +26,9 @@ CSAR_ENTRY_FILE = 'test_entry.yaml'
 CSAR_OUTPUT_FILE = 'output.csar'
 
 Args = collections.namedtuple('Args',
-        ['source', 'entry', 'manifest', 'history', 'tests', 'licenses', 'digest'])
+           ['source', 'entry', 'manifest', 'history', 'tests',
+            'licenses', 'digest', 'certificate', 'privkey'])
+
 
 ARGS_MANIFEST = {
             'source': CSAR_RESOURCE_DIR,
@@ -35,7 +37,9 @@ ARGS_MANIFEST = {
             'history': 'ChangeLog.txt',
             'tests': 'Tests',
             'licenses': 'Licenses',
-            'digest': None
+            'digest': None,
+            'certificate': None,
+            'privkey': None,
         }
 
 ARGS_MANIFEST_DIGEST = {
@@ -45,9 +49,22 @@ ARGS_MANIFEST_DIGEST = {
             'history': 'ChangeLog.txt',
             'tests': 'Tests',
             'licenses': 'Licenses',
-            'digest': 'sha256'
+            'digest': 'sha256',
+            'certificate': None,
+            'privkey': None,
         }
 
+ARGS_MANIFEST_DIGEST_CERT = {
+            'source': CSAR_RESOURCE_DIR,
+            'entry': CSAR_ENTRY_FILE,
+            'manifest': 'test_entry.mf',
+            'history': 'ChangeLog.txt',
+            'tests': 'Tests',
+            'licenses': 'Licenses',
+            'digest': 'sha256',
+            'certificate': 'test.crt',
+            'privkey': 'tests/resources/signature/test.key',
+        }
 
 ARGS_NO_MANIFEST = {
             'source': CSAR_RESOURCE_DIR,
@@ -57,6 +74,8 @@ ARGS_NO_MANIFEST = {
             'tests': None,
             'licenses': None,
             'digest': None,
+            'certificate': None,
+            'privkey': None,
         }
 
 
@@ -65,7 +84,7 @@ def csar_write_test(args):
     csar_extract_dir = tempfile.mkdtemp()
     try:
         csar.write(args.source, args.entry, csar_target_dir + '/' + CSAR_OUTPUT_FILE, args)
-        csar.read(csar_target_dir + '/' + CSAR_OUTPUT_FILE, csar_extract_dir)
+        csar.read(csar_target_dir + '/' + CSAR_OUTPUT_FILE, csar_extract_dir, True)
         assert filecmp.cmp(args.source + '/' + args.entry, csar_extract_dir + '/' + args.entry)
         if(args.manifest and not args.digest):
             assert filecmp.cmp(args.source + '/' + args.manifest,
@@ -96,3 +115,10 @@ def test_CSARWrite_manifest_digest():
     if not os.path.exists(license_path):
         os.makedirs(license_path)
     csar_write_test(Args(**ARGS_MANIFEST_DIGEST))
+
+def test_CSARWrite_manifest_digest_cert():
+    # Because git can not store emptry directory, we need to create manually here
+    license_path = ARGS_MANIFEST['source'] + '/' + ARGS_MANIFEST['licenses']
+    if not os.path.exists(license_path):
+        os.makedirs(license_path)
+    csar_write_test(Args(**ARGS_MANIFEST_DIGEST_CERT))

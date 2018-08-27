@@ -25,6 +25,7 @@ import tempfile
 from vnfsdk_pkgtools import validator
 
 def csar_create_func(namespace):
+
     csar.write(namespace.source,
                         namespace.entry,
                         namespace.destination,
@@ -32,14 +33,16 @@ def csar_create_func(namespace):
 
 def csar_open_func(namespace):
     csar.read(namespace.source,
-                       namespace.destination)
+              namespace.destination,
+              namespace.no_verify_cert)
 
 def csar_validate_func(namespace):
     workdir = tempfile.mkdtemp()
     try:
         reader = None
         reader = csar.read(namespace.source,
-                           workdir)
+                           workdir,
+                           no_verify_cert=True)
 
         driver = validator.get_validator(namespace.parser)
         driver.validate(reader)
@@ -87,6 +90,12 @@ def parse_args(args_list):
         '--digest',
         choices=['SHA256', 'SHA512'],
         help='If present, means to check the file deigest in manifest;  compute the digest using the specified hash algorithm of all files in the csar package to be put into the manifest file')
+    csar_create.add_argument(
+        '--certificate',
+        help='Certificate file for certification, relative to service template directory')
+    csar_create.add_argument(
+        '--privkey',
+        help='Private key file for certification, absoluate or relative path')
 
 
     csar_open = subparsers.add_parser('csar-open')
@@ -98,6 +107,11 @@ def parse_args(args_list):
         '-d', '--destination',
         help='Output directory to extract the CSAR into',
         required=True)
+    csar_open.add_argument(
+        '--no-verify-cert',
+        action='store_true',
+        help="Do NOT verify the signer's certificate")
+
 
     csar_validate = subparsers.add_parser('csar-validate')
     csar_validate.set_defaults(func=csar_validate_func)
