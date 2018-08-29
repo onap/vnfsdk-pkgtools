@@ -14,7 +14,6 @@
 # under the License.
 #
 
-from vnfsdk_pkgtools.packager import csar
 import sys
 import logging
 import argparse
@@ -22,7 +21,12 @@ import os
 import shutil
 import tempfile
 
+import pkg_resources
+
+from vnfsdk_pkgtools.packager import csar
 from vnfsdk_pkgtools import validator
+from vnfsdk_pkgtools import vnfreq
+
 
 def csar_create_func(namespace):
 
@@ -39,13 +43,20 @@ def csar_open_func(namespace):
 def csar_validate_func(namespace):
     workdir = tempfile.mkdtemp()
     try:
-        reader = None
+        err = 0
         reader = csar.read(namespace.source,
                            workdir,
                            no_verify_cert=True)
 
         driver = validator.get_validator(namespace.parser)
         driver.validate(reader)
+        print("---Basic & HPA validation passed!---")
+        if namespace.test_reqs:
+            print("---Check VNF Requirements---")
+            err = vnfreq.check_and_print(namespace.test_reqs,
+                                         reader,
+                                         driver)
+        return err
     finally:
         shutil.rmtree(workdir, ignore_errors=True)
 
@@ -121,7 +132,14 @@ def parse_args(args_list):
     csar_validate.add_argument(
         '-p', '--parser',
         default='toscaparser',
+        choices=[ep.name for ep in pkg_resources.iter_entry_points(validator.NS)],
         help='use which csar parser to validate')
+    csar_validate.add_argument(
+        '--test-reqs',
+        nargs='*',
+        default=[],
+        choices=[ep.name for ep in pkg_resources.iter_entry_points(vnfreq.NS)],
+        help='list of the ID of VNF Requirements to check, i.e. R-66070')
 
     return parser.parse_args(args_list)
 
@@ -141,7 +159,7 @@ def init_logging(args):
 def main():
     args = parse_args(sys.argv[1:])
     init_logging(args)
-    args.func(args)
+    return args.func(args)
 
 
 if __name__ == '__main__':

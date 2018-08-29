@@ -85,7 +85,10 @@ setup(
             'vnfsdk = vnfsdk_pkgtools.cli.__main__:main'],
         'vnfsdk.pkgtools.validator': [
             'toscaparser = vnfsdk_pkgtools.validator.toscaparser_validator:ToscaparserValidator',
-        ]
+        ],
+        'vnfsdk.pkgtools.vnfreq': [
+            'R-66070 = vnfsdk_pkgtools.vnfreq.pkg_reqs:R66070',
+        ],
     },
 
     include_package_data=True,

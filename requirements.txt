@@ -3,3 +3,4 @@ requests>=2.3.0
 stevedore>=1.9.0
 udatetime<1.0,>=0.0.16
 nfv-toscaparser<2.0,>=1.0.1
+prettytable<1.0

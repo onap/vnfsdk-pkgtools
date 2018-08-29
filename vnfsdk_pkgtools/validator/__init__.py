@@ -19,7 +19,7 @@ import six
 from stevedore import driver
 
 
-VALIDATOR_NS = "vnfsdk.pkgtools.validator"
+NS = "vnfsdk.pkgtools.validator"
 
 def get_validator(params):
     """Get validate driver and load it.
@@ -27,7 +27,7 @@ def get_validator(params):
     :param params: parameters to decide which validator to load
     """
 
-    loaded_driver = driver.DriverManager(VALIDATOR_NS,
+    loaded_driver = driver.DriverManager(NS,
                                          params,
                                          invoke_on_load=True)
     return loaded_driver.driver
