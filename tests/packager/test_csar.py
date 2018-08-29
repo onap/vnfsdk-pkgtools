@@ -19,6 +19,8 @@ import os
 import tempfile
 import shutil
 
+import pytest
+
 from vnfsdk_pkgtools.packager import csar
 
 CSAR_RESOURCE_DIR = 'tests/resources/csar'
@@ -78,6 +80,30 @@ ARGS_NO_MANIFEST = {
             'privkey': None,
         }
 
+INVALID_ARGS_NO_MANIFEST = {
+            'source': CSAR_RESOURCE_DIR,
+            'entry': CSAR_ENTRY_FILE,
+            'manifest': None,
+            'history': None,
+            'tests': None,
+            'licenses': None,
+            'digest': 'sha256',
+            'certificate': None,
+            'privkey': None,
+        }
+
+INVALID_ARGS_NO_PRIVKEY = {
+            'source': CSAR_RESOURCE_DIR,
+            'entry': CSAR_ENTRY_FILE,
+            'manifest': 'test_entry.mf',
+            'history': None,
+            'tests': None,
+            'licenses': None,
+            'digest': None,
+            'certificate': 'test.crt',
+            'privkey': None,
+        }
+
 
 def csar_write_test(args):
     csar_target_dir = tempfile.mkdtemp()
@@ -116,9 +142,20 @@ def test_CSARWrite_manifest_digest():
         os.makedirs(license_path)
     csar_write_test(Args(**ARGS_MANIFEST_DIGEST))
 
+
 def test_CSARWrite_manifest_digest_cert():
     # Because git can not store emptry directory, we need to create manually here
     license_path = ARGS_MANIFEST['source'] + '/' + ARGS_MANIFEST['licenses']
     if not os.path.exists(license_path):
         os.makedirs(license_path)
     csar_write_test(Args(**ARGS_MANIFEST_DIGEST_CERT))
+
+
+def test_CSARWrite_invalid_arg():
+    with pytest.raises(ValueError) as excinfo:
+        csar_write_test(Args(**INVALID_ARGS_NO_MANIFEST))
+    excinfo.match(r"Must specify manifest file")
+
+    with pytest.raises(ValueError) as excinfo:
+        csar_write_test(Args(**INVALID_ARGS_NO_PRIVKEY))
+    excinfo.match(r"Need private key file")

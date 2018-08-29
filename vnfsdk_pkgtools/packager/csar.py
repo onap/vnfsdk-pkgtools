@@ -98,6 +98,8 @@ def write(source, entry, destination, args):
         metadata[META_ENTRY_MANIFEST_FILE_KEY] = args.manifest
         manifest_file = manifest.Manifest(source, args.manifest) 
         manifest_file_full_path = os.path.join(source, args.manifest)
+    elif args.certificate or args.digest:
+        raise ValueError("Must specify manifest file if certificate or digest is specified")
     else:
         manifest_file = None
         manifest_file_full_path = None
@@ -117,7 +119,7 @@ def write(source, entry, destination, args):
                        check_dir=False)
         metadata[META_ENTRY_CERT_FILE_KEY] = args.certificate
         if not args.privkey:
-            raise RuntimeError('Need private key file for signing')
+            raise ValueError('Need private key file for signing')
         check_file_dir(root='',
                        entry=args.privkey,
                        msg='Please specify a valid private key file.',
@@ -333,8 +335,6 @@ class _CSARReader(object):
                          self.manifest.signature,
                          no_verify_cert)
             os.unlink(tmp_manifest)
-
-
 
     def _download(self, url, target):
         response = requests.get(url, stream=True)
