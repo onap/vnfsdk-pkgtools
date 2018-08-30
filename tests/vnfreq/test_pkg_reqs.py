@@ -17,11 +17,36 @@ import pytest
 
 from vnfsdk_pkgtools import vnfreq
 
+
+def check_result(reqid, reader, tosca, expected_fail_msg):
+    tester = vnfreq.get_vnfreq_tester(reqid)
+    tester.check(reader, tosca)
+    if expected_fail_msg:
+        assert isinstance(tester.err, vnfreq.VnfRequirementError)
+        assert expected_fail_msg in str(tester.err)
+    else:
+        assert tester.err == 0
+
+
 def test_R66070_fail(mocker):
     reader = mocker.Mock()
     reader.manifest = None
+    check_result('R-66070', reader, None, 'No manifest file found')
 
-    tester = vnfreq.get_vnfreq_tester("R-66070")
-    tester.check(reader, None)
-    assert isinstance(tester.err, vnfreq.VnfRequirementError)
+
+def test_R77707(mocker, tmpdir):
+    # check only manifest file - success
+    p1 = tmpdir.join("manifest.mf")
+    p1.write("manifest")
+    reader = mocker.Mock()
+    reader.destination = str(tmpdir)
+    reader.entry_manifest_file = "manifest.mf"
+    reader.manifest.digests = {}
+    check_result('R-77707', reader, None, None)
+
+    # check additional file - fail
+    p2 = tmpdir.mkdir('sub').join("non-existing")
+    p2.write("non existing")
+    check_result('R-77707', reader, None,
+                 'Package component sub/non-existing not found in manifest file')
 

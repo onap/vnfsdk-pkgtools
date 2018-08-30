@@ -14,10 +14,12 @@
 #
 
 import abc
+import os
 
 import six
 from stevedore import driver
 
+from vnfsdk_pkgtools.packager import csar
 from vnfsdk_pkgtools import vnfreq
 
 
@@ -34,4 +36,20 @@ class R66070(vnfreq.TesterBase):
             raise vnfreq.VnfRequirementError("No manifest file found")
         # Existing reader.manifest already means a valid manifest file
         # no futher check needed.
+        return 0
+
+
+class R77707(vnfreq.TesterBase):
+    ID = "R-77707"
+    DESC = ("The VNF provider MUST include a Manifest File that contains "
+            "a list of all the components in the VNF package.")
+
+    def _do_check(self, reader, tosca):
+        for root, dirs, files in os.walk(reader.destination):
+            for file in files:
+                full_path = os.path.join(root, file)
+                rel_path = os.path.relpath(full_path, reader.destination)
+                if rel_path not in (reader.entry_manifest_file, csar.META_FILE):
+                    if rel_path not in reader.manifest.digests:
+                        raise vnfreq.VnfRequirementError("Package component %s not found in manifest file" % rel_path)
         return 0
