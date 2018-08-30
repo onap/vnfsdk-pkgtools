@@ -87,6 +87,7 @@ setup(
             'toscaparser = vnfsdk_pkgtools.validator.toscaparser_validator:ToscaparserValidator',
         ],
         'vnfsdk.pkgtools.vnfreq': [
+            'R-04298 = vnfsdk_pkgtools.vnfreq.pkg_reqs:R04298',
             'R-66070 = vnfsdk_pkgtools.vnfreq.pkg_reqs:R66070',
             'R-77707 = vnfsdk_pkgtools.vnfreq.pkg_reqs:R77707',
         ],

@@ -50,3 +50,15 @@ def test_R77707(mocker, tmpdir):
     check_result('R-77707', reader, None,
                  'Package component sub/non-existing not found in manifest file')
 
+
+def test_R04298(mocker, tmpdir):
+    p1 = tmpdir.mkdir('tests').join('script.sh')
+    p1.write("#!/bin/sh")
+    reader = mocker.Mock()
+    reader.destination = str(tmpdir)
+    reader.entry_tests_dir = "tests"
+    check_result('R-04298', reader, None, None)
+
+    p1.remove()
+    check_result('R-04298', reader, None,
+                 'No testing scripts found')

@@ -53,3 +53,18 @@ class R77707(vnfreq.TesterBase):
                     if rel_path not in reader.manifest.digests:
                         raise vnfreq.VnfRequirementError("Package component %s not found in manifest file" % rel_path)
         return 0
+
+
+class R04298(vnfreq.TesterBase):
+    ID = "R-04298"
+    DESC = ("The VNF provider MUST provide their testing scripts "
+            "to support testing.")
+
+    def _do_check(self, reader, tosca):
+        if not reader.entry_tests_dir:
+            raise vnfreq.VnfRequirementError("No test directory found")
+        elif not os.listdir(os.path.join(reader.destination,
+                                         reader.entry_tests_dir)):
+            raise vnfreq.VnfRequirementError("No testing scripts found")
+        return 0
+
