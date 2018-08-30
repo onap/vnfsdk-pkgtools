@@ -83,3 +83,10 @@ def test_R26881(mocker, tmpdir):
                       }
     check_result('R-26881', reader, validator, None)
 
+
+def test_R35851(mocker):
+    validator = mocker.Mock()
+    node = mocker.Mock()
+    validator.tosca.nodetemplates = [node]
+    check_result('R-35851', None, validator, None)
+

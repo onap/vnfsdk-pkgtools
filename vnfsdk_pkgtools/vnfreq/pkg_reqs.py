@@ -95,3 +95,25 @@ class R26881(vnfreq.TesterBase):
             raise vnfreq.VnfRequirementError("No valid binaries or images for VNF instantion found")
         return 0
 
+
+class R35851(vnfreq.TesterBase):
+    ID = "R-35851"
+    DESC = ("The VNF Package MUST include VNF topology that describes "
+            "basic network and application connectivity internal and "
+            "external to the VNF including Link type, KPIs, Bandwidth, "
+            "latency, jitter, QoS (if applicable) for each interface.")
+
+    def _do_check(self, reader, tosca):
+        # Only check the existence of Cp or VL
+        # link type, bandwidth are already enfoced by ONAP onbarding DM
+        # other KPIs are not defined yet.
+        found = False
+        for node in getattr(tosca.tosca, 'nodetemplates', []):
+            if tosca.is_type(node, 'tosca.nodes.nfv.VduCp') or \
+               tosca.is_type(node, 'tosca.nodes.nfv.VnfVirtualLink'):
+                   found = True
+                   break
+        if not found:
+            raise vnfreq.VnfRequirementError("No basic network or application connectivity found")
+        return 0
+
