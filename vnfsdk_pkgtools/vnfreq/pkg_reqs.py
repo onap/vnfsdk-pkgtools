@@ -20,6 +20,7 @@ import six
 from stevedore import driver
 
 from vnfsdk_pkgtools.packager import csar
+from vnfsdk_pkgtools.validator import toscaparser_validator as tv
 from vnfsdk_pkgtools import vnfreq
 
 
@@ -66,5 +67,31 @@ class R04298(vnfreq.TesterBase):
         elif not os.listdir(os.path.join(reader.destination,
                                          reader.entry_tests_dir)):
             raise vnfreq.VnfRequirementError("No testing scripts found")
+        return 0
+
+
+class R26881(vnfreq.TesterBase):
+    ID = "R-26881"
+    DESC = ("The VNF provider MUST provide the binaries and images needed "
+            "to instantiate the VNF (VNF and VNFC images).")
+
+    def _do_check(self, reader, tosca):
+        entry_path = os.path.dirname(os.path.join(reader.destination,
+                                                  reader.entry_definitions))
+        valid_artifacts = []
+        for node in getattr(tosca.tosca, 'nodetemplates', []):
+            if tosca.is_type(node, 'tosca.nodes.nfv.Vdu.Compute') or \
+               tosca.is_type(node, 'tosca.nodes.nfv.Vdu.VirtualStorage'):
+                # TODO(llu) nfv-toscaparser now doesn't support artifacts
+                # yet, we have to hack it for now.
+                # See https://jira.opnfv.org/browse/PARSER-184.
+                for name, props in node.entity_tpl.get('artifacts', {}).iteritems():
+                    file = props.get('file', None)
+                    if file and \
+                       os.path.isfile(os.path.join(entry_path, file)) or \
+                       os.path.isfile(os.path.join(reader.destination, file)):
+                           valid_artifacts.append(file)
+        if not valid_artifacts:
+            raise vnfreq.VnfRequirementError("No valid binaries or images for VNF instantion found")
         return 0
 
