@@ -62,3 +62,24 @@ def test_R04298(mocker, tmpdir):
     p1.remove()
     check_result('R-04298', reader, None,
                  'No testing scripts found')
+
+def test_R26881(mocker, tmpdir):
+    p1 = tmpdir.join('entry.yaml')
+    p1.write("")
+    p2 = tmpdir.join('image')
+    p2.write("")
+
+    reader = mocker.Mock()
+    reader.destination = str(tmpdir)
+    reader.entry_definitions = 'entry.yaml'
+
+    validator = mocker.Mock()
+    node = mocker.Mock()
+    validator.tosca.nodetemplates = [node]
+    node.entity_tpl = {'artifacts': {'sw_image': {'file': 'image',
+                                                  'type': 'tosca.artifacts.nfv.SwImage',
+                                                 }
+                                    }
+                      }
+    check_result('R-26881', reader, validator, None)
+

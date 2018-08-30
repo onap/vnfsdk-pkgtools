@@ -88,6 +88,7 @@ setup(
         ],
         'vnfsdk.pkgtools.vnfreq': [
             'R-04298 = vnfsdk_pkgtools.vnfreq.pkg_reqs:R04298',
+            'R-26881 = vnfsdk_pkgtools.vnfreq.pkg_reqs:R26881',
             'R-66070 = vnfsdk_pkgtools.vnfreq.pkg_reqs:R66070',
             'R-77707 = vnfsdk_pkgtools.vnfreq.pkg_reqs:R77707',
         ],
