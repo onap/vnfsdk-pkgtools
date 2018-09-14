@@ -7,238 +7,238 @@ schemas:
       # hpa key name
       cpuModelSpecificationBinding:
         # json encoded key name: reg expression for the valid value
-        schema-version: &any '.*'
-        schema-location: *any
-        platform-id: &generic 'generic'
+        schemaVersion: &any '.*'
+        schemaSelector: *any
+        hardwarePlatform: &generic 'generic'
         mandatory: &bool 'true|false|TRUE|FALSE|True|False'
-        configuration-value: 'strictBinding|equalOrBetterBinding'
+        configurationValue: '^(strictBinding|equalOrBetterBinding)$'
       instructionSetRequirements:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       simultaneousMultiThreading:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: 'enabled|disabled'
+        configurationValue: '^(enabled|disabled)$'
       hypervisorConfiguration:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       computeRas:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: 'pciDetectedAndCorrectedErrors|pciDetectedAndUncorrectedErrors'
+        configurationValue: '^(pciDetectedAndCorrectedErrors|pciDetectedAndUncorrectedErrors)$'
       cpuModel:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       directIoAccessToCache:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       accelerator:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       measuredLaunchEnvironment:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       secureEnclave:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       numVirtualCpu:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: '\d+'
+        configurationValue: &pos_int '^\d+$'
       virtualCpuClock:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: '\d+\s*(Hz|kHz|MHz|GHz)'
+        configurationValue: '^\d+\s*(Hz|kHz|MHz|GHz)$'
       logicalCpuPinningPolicy:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: 'dedicated|shared'
+        configurationValue: '^(dedicated|shared)$'
       logicalCpuThreadPinningPolicy:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: 'require|isolate|prefer'
+        configurationValue: '^(require|isolate|prefer)$'
   vduMemRequirements:
       memoryPageSize:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: '\d+\s*(B|kB|KB|KiB|MB|MiB|GB|GiB|TB|TiB)'
+        configurationValue: &mem_size '^\d+\s*(B|kB|KB|KiB|MB|MiB|GB|GiB|TB|TiB)$'
       numberOfPages:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: '\d+'
+        configurationValue: *pos_int
       memoryAllocationPolicy:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: 'strictLocalAffinity|preferredLocalAffinity'
+        configurationValue: '^(strictLocalAffinity|preferredLocalAffinity)$'
       memoryType:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       memorySpeed:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       memoryRas:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       memoryBandwidth:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: '\d+'
+        configurationValue: *pos_int
       processorCacheAllocationType:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       processorCacheAllocationSize:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
   vduStorageRequirements:
       storageIops:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: '\d+'
+        configurationValue: *pos_int
       storageResilencyMechanism:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: 'erasure|tripleReplication'
+        configurationValue: '^(erasure|tripleReplication)$'
       processorCacheAllocationSize:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       processorCacheAllocationSize:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
   logicalNodeComputeMemoryRequirements:
       numberCpu:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: '\d+'
+        configurationValue: *pos_int
       localNumaMemorySize:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: '\d+\s*(B|kB|KB|KiB|MB|MiB|GB|GiB|TB|TiB)'
+        configurationValue: *mem_size
   logicalNodeIoRequirements:
       pciVendorId:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       pciDeviceId:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       pciNumDevices:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: '\d+'
+        configurationValue: *pos_int
       pciAddress:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       pciDeviceLocalToNumaNode:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: 'required|notRequired'
+        configurationValue: '^(required|notRequired)$'
   networkInterfaceRequirements:
       nicFeature:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       dataProcessingAccelerationLibrary:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: 'DPDK|dpdk'
+        configurationValue: '^(DPDK|dpdk)$'
       dataProcessingAccelerationLibraryVersion:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: *any
+        configurationValue: *any
       interfaceType:
-        schema-version: *any
-        schema-location: *any
-        platform-id: *generic
+        schemaVersion: *any
+        schemaSelector: *any
+        hardwarePlatform: *generic
         mandatory: *bool
-        configuration-value: 'virtio|PCI-Passthrough|SR-IOV|E1000|RTL8139|PCNET'
+        configurationValue: '^(virtio|PCI-Passthrough|SR-IOV|E1000|RTL8139|PCNET)$'
 mappings:
 # mapping between property value of a tosca node type and the valid hpa schema
 #   type: tosca node type

@@ -138,6 +138,9 @@ class ToscaparserValidator(validator.ValidatorBase):
                 if attr not in hpa_schema[key]:
                     msg = "node %s, HPA key %s: %s is NOT valid HPA attribute"
                     raise HpaValueError(msg % (refkey, key, attr))
+                if not isinstance(val, basestring):
+                    msg = ("node %s, HPA key %s, attr %s: %s is not a string attr value")
+                    raise HpaValueError(msg % (refkey, key, attr, str(val).encode('ascii','replace')))
                 attr_schema = hpa_schema[key][attr]
                 if not re.match(attr_schema, str(val)):
                     msg = ("node %s, HPA key %s, attr %s: %s is not a valid HPA "
