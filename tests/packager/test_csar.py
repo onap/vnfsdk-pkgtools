@@ -18,12 +18,15 @@ import filecmp
 import os
 import tempfile
 import shutil
-
 import pytest
 
 from vnfsdk_pkgtools.packager import csar
+from vnfsdk_pkgtools import util
 
-CSAR_RESOURCE_DIR = 'tests/resources/csar'
+
+ROOT_DIR = util.get_project_root()
+
+CSAR_RESOURCE_DIR = os.path.join(ROOT_DIR, 'tests', 'resources', 'csar')
 CSAR_ENTRY_FILE = 'test_entry.yaml'
 CSAR_OUTPUT_FILE = 'output.csar'
 
@@ -65,7 +68,7 @@ ARGS_MANIFEST_DIGEST_CERT = {
             'licenses': 'Licenses',
             'digest': 'sha256',
             'certificate': 'test.crt',
-            'privkey': 'tests/resources/signature/test.key',
+            'privkey': os.path.join(ROOT_DIR, 'tests', 'resources', 'signature', 'test.key')
         }
 
 ARGS_NO_MANIFEST = {

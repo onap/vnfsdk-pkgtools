@@ -19,10 +19,14 @@ import pytest
 
 from vnfsdk_pkgtools.packager import csar
 from vnfsdk_pkgtools.validator import toscaparser_validator
+from vnfsdk_pkgtools import util
 
-CSAR_PATH = 'tests/resources/test_import.csar'
-HPA_PATH = 'tests/resources/hpa.csar'
-BAD_HPA_PATH = 'tests/resources/hpa_bad.csar'
+ROOT_DIR = util.get_project_root()
+RESOURCES_DIR = os.path.join(ROOT_DIR, 'tests', 'resources')
+
+CSAR_PATH = os.path.join(RESOURCES_DIR, 'test_import.csar')
+HPA_PATH = os.path.join(RESOURCES_DIR, 'hpa.csar')
+BAD_HPA_PATH = os.path.join(RESOURCES_DIR, 'hpa_bad.csar')
 
 def test_validate(tmpdir):
     reader = csar._CSARReader(CSAR_PATH, str(tmpdir.mkdir('validate')))

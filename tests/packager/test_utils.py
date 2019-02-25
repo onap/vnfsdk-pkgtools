@@ -19,6 +19,14 @@ import subprocess
 import pytest
 
 from vnfsdk_pkgtools.packager import utils
+from vnfsdk_pkgtools import util
+
+ROOT_DIR = util.get_project_root()
+RESOURCES_DIR= os.path.join(ROOT_DIR, 'tests', 'resources', 'signature')
+
+MSG_FILE  = os.path.join(RESOURCES_DIR, 'manifest.mf')
+CERT_FILE = os.path.join(RESOURCES_DIR, 'test.crt')
+KEY_FILE  = os.path.join(RESOURCES_DIR, 'test.key')
 
 CONTENT = "needToBeHashed"
 SHA256 = "20a480339aa4371099f9503511dcc5a8051ce3884846678ced5611ec64bbfc9c"
@@ -37,11 +45,6 @@ def test_cal_file_hash_remote(mocker):
             self.content = CONTENT
     mocker.patch('requests.get', new=FakeRequest)
     assert SHA256 == utils.cal_file_hash("", "http://fake", 'sha256')
-
-
-MSG_FILE  = "tests/resources/signature/manifest.mf"
-CERT_FILE = "tests/resources/signature/test.crt"
-KEY_FILE  = "tests/resources/signature/test.key"
 
 def test_sign_verify_pairwise():
     cms = utils.sign(MSG_FILE, CERT_FILE, KEY_FILE)

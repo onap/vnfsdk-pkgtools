@@ -1,4 +1,10 @@
+*.iml
 *.egg*
 *.pyc
 .coverage
 .tox
+.cache
+.idea
+build/
+xunit-results.xml
+coverage.xml
