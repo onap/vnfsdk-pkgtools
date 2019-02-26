@@ -22,6 +22,30 @@
       "revId": "8aaa7a38c19fc7db5b0f0f6496482ffc68d3d44a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c07d943f_b500d7e3",
+        "filename": "vnfsdk_pkgtools/util.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 3433
+      },
+      "writtenOn": "2019-02-26T05:57:20Z",
+      "side": 1,
+      "message": "ok. Thanks for hint :)",
+      "parentUuid": "9d2f3c6b_b46fa6f6",
+      "range": {
+        "startLine": 6,
+        "startChar": 52,
+        "endLine": 6,
+        "endChar": 55
+      },
+      "revId": "8aaa7a38c19fc7db5b0f0f6496482ffc68d3d44a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
