@@ -15,12 +15,30 @@
 #
 
 import pytest
-from vnfsdk_pkgtools.cli import  __main__
+from assertpy import assert_that
+
+import vnfsdk_pkgtools.cli.args_parser as arg_parser
+
 
 def test_main(capsys):
     with pytest.raises(SystemExit):
-        args = __main__.parse_args(['csar-create', '-h'])
+        args = arg_parser.parse_args(['csar-create', '-h'])
         args.func(args)
     out, err = capsys.readouterr()
     assert out.startswith('usage:')
 
+
+def test_that_default_vnf_csar_type_is_used_when_type_is_not_defined_for_csar_validate_parser():
+    args = arg_parser.parse_args(['csar-validate', 'dummyVNF.csar'])
+
+    assert_that(args.parser).is_equal_to('toscaparser')
+    assert_that(args.type).is_equal_to('vnf')
+    assert_that(args.source).is_equal_to('dummyVNF.csar')
+
+
+def test_that_pnf_csar_type_is_used_for_csar_validate_cli_parser():
+    args = arg_parser.parse_args(['csar-validate', '-t', 'pnf', 'dummyPNF.csar'])
+
+    assert_that(args.parser).is_equal_to('toscaparser')
+    assert_that(args.type).is_equal_to('pnf')
+    assert_that(args.source).is_equal_to('dummyPNF.csar')

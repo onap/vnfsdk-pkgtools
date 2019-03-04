@@ -17,7 +17,7 @@ import os
 
 import pytest
 
-from vnfsdk_pkgtools.packager import csar
+from vnfsdk_pkgtools.packager import csar, csar_type
 from vnfsdk_pkgtools.validator import toscaparser_validator
 from vnfsdk_pkgtools import util
 
@@ -29,19 +29,29 @@ HPA_PATH = os.path.join(RESOURCES_DIR, 'hpa.csar')
 BAD_HPA_PATH = os.path.join(RESOURCES_DIR, 'hpa_bad.csar')
 
 def test_validate(tmpdir):
-    reader = csar._CSARReader(CSAR_PATH, str(tmpdir.mkdir('validate')))
+    reader = _create_csar_reader(CSAR_PATH, tmpdir)
     validator = toscaparser_validator.ToscaparserValidator()
     validator.validate(reader)
     assert hasattr(validator, 'tosca')
+
 
 def test_validate_hpa(tmpdir):
-    reader = csar._CSARReader(HPA_PATH, str(tmpdir.mkdir('validate')))
+    reader = _create_csar_reader(HPA_PATH, tmpdir)
     validator = toscaparser_validator.ToscaparserValidator()
     validator.validate(reader)
     assert hasattr(validator, 'tosca')
 
+
 def test_validate_hpa_bad(tmpdir):
-    reader = csar._CSARReader(BAD_HPA_PATH, str(tmpdir.mkdir('validate')))
+    reader = _create_csar_reader(BAD_HPA_PATH, tmpdir)
     validator = toscaparser_validator.ToscaparserValidator()
     with pytest.raises(toscaparser_validator.HpaValueError):
         validator.validate(reader)
+
+
+def _create_csar_reader(path, tmpdir):
+    return csar._CSARReader(
+        source=path,
+        destination=str(tmpdir.mkdir('validate')),
+        csar_type=csar_type.VNF_CSAR_TYPE
+    )

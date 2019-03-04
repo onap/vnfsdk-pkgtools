@@ -34,8 +34,8 @@ class ManifestException(Exception):
 class Manifest(object):
     ' Manifest file in CSAR package'
     def __init__(self, root_path, manifest_path):
-        self.path = manifest_path
         self.root = root_path
+        self.path = manifest_path
         self.metadata = {}
         # digest dict
         #   :key = source

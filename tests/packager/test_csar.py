@@ -20,6 +20,7 @@ import tempfile
 import shutil
 import pytest
 
+from vnfsdk_pkgtools.packager import csar_type
 from vnfsdk_pkgtools.packager import csar
 from vnfsdk_pkgtools import util
 
@@ -113,7 +114,13 @@ def csar_write_test(args):
     csar_extract_dir = tempfile.mkdtemp()
     try:
         csar.write(args.source, args.entry, csar_target_dir + '/' + CSAR_OUTPUT_FILE, args)
-        csar.read(csar_target_dir + '/' + CSAR_OUTPUT_FILE, csar_extract_dir, True)
+        csar.read(
+            source=csar_target_dir + '/' + CSAR_OUTPUT_FILE,
+            destination=csar_extract_dir,
+            csar_type=csar_type.VNF_CSAR_TYPE,
+            no_verify_cert=True
+        )
+
         assert filecmp.cmp(args.source + '/' + args.entry, csar_extract_dir + '/' + args.entry)
         if(args.manifest and not args.digest):
             assert filecmp.cmp(args.source + '/' + args.manifest,

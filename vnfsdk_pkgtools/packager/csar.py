@@ -22,7 +22,7 @@ import zipfile
 import requests
 from ruamel import yaml # @UnresolvedImport
 
-from vnfsdk_pkgtools.packager import manifest
+from vnfsdk_pkgtools.packager import manifest, manifest_factory
 from vnfsdk_pkgtools.packager import utils
 
 LOG = logging.getLogger(__name__)
@@ -96,7 +96,7 @@ def write(source, entry, destination, args):
                        msg='Please specify a valid manifest file.',
                        check_dir=False)
         metadata[META_ENTRY_MANIFEST_FILE_KEY] = args.manifest
-        manifest_file = manifest.Manifest(source, args.manifest) 
+        manifest_file = manifest.Manifest(source, args.manifest)
         manifest_file_full_path = os.path.join(source, args.manifest)
     elif args.certificate or args.digest:
         raise ValueError("Must specify manifest file if certificate or digest is specified")
@@ -179,7 +179,7 @@ def write(source, entry, destination, args):
 
 class _CSARReader(object):
 
-    def __init__(self, source, destination, no_verify_cert=True):
+    def __init__(self, source, destination, csar_type, no_verify_cert=True):
         if os.path.isdir(destination) and os.listdir(destination):
             raise ValueError('{0} already exists and is not empty. '
                              'Please specify the location where the CSAR '
@@ -192,6 +192,7 @@ class _CSARReader(object):
             source = download_target
         self.source = os.path.expanduser(source)
         self.destination = os.path.expanduser(destination)
+        self.csar_type = csar_type
         self.metadata = {}
         self.manifest = None
         try:
@@ -297,8 +298,12 @@ class _CSARReader(object):
                             'The manifest file {0} referenced by the metadata '
                             'file does not exist.'.format(self.entry_manifest_file),
                             check_dir=False)
-             self.manifest = manifest.Manifest(self.destination,
-                                               self.entry_manifest_file)
+
+             self.manifest = manifest_factory.create_manifest(
+                 root_path=self.destination,
+                 manifest_path=self.entry_manifest_file,
+                 csar_type=self.csar_type
+             )
 
 
         if(self.entry_history_file):
@@ -348,7 +353,8 @@ class _CSARReader(object):
                     f.write(chunk)
 
 
-def read(source, destination, no_verify_cert=False):
+def read(source, destination, csar_type, no_verify_cert=False):
     return _CSARReader(source=source,
                        destination=destination,
+                       csar_type=csar_type,
                        no_verify_cert=no_verify_cert)

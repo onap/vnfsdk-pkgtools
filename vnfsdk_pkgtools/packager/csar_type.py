@@ -1,0 +1,2 @@
+PNF_CSAR_TYPE = 'pnf'
+VNF_CSAR_TYPE = 'vnf'
