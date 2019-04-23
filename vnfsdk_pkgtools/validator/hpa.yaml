@@ -253,14 +253,24 @@ mappings:
     key: capability:virtual_compute##virtual_cpu##vdu_cpu_requirements
     schema: vduCpuRequirements
   - type: tosca.nodes.nfv.Vdu.Compute
-    key: capability:virtual_compute##virtual_memory##vdu_memory_requirements
+    key: capability:virtual_compute##virtual_memory##vdu_mem_requirements
     schema: vduMemRequirements
-  - type: tosca.nodes.nfv.Vdu.VirtualStorage
-    key: vdu_storage_requirements
-    schema: vduStorageRequirements
   - type: tosca.nodes.nfv.VduCp
+    key: virtual_network_interface_requirements##network_interface_requirements
+    schema: networkInterfaceRequirements
+  - type: tosca.nodes.nfv.VnfExtCp
     key: virtual_network_interface_requirements##network_interface_requirements
     schema: networkInterfaceRequirements
   - type: tosca.nodes.nfv.VduCp
     key: virtual_network_interface_requirements##nic_io_requirements##logical_node_requirements
     schema: logicalNodeIoRequirements
+  - type: tosca.nodes.nfv.Vdu.VirtualBlockStorage
+    key: virtual_block_storage_data##vdu_storage_requirements
+    schema: vduStorageRequirements
+  # NOTE! the followings are for ONAP Casablanca release DM backward compatibility
+  - type: tosca.nodes.nfv.Vdu.Compute
+    key: capability:virtual_compute##virtual_memory##vdu_memory_requirements
+    schema: vduMemRequirements
+  - type: tosca.nodes.nfv.Vdu.VirtualStorage
+    key: vdu_storage_requirements
+    schema: vduStorageRequirements
