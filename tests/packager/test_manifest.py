@@ -126,7 +126,7 @@ def test_update_to_file(tmpdir):
     m2 = manifest.Manifest(mf.dirname, 'test.mf')
     assert m1.metadata['vnf_provider_id'] == m2.metadata['vnf_provider_id']
     assert m1.digests['digest'] == m2.digests['digest2']
-    assert len(m2.digests.keys()) == 2
+    assert len(list(m2.digests.keys())) == 2
     assert m2.signature == CMS
 
 def test_signature(tmpdir):

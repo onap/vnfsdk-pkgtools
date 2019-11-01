@@ -52,7 +52,7 @@ def check_and_print(test_reqs, reader, tosca):
         lines = textwrap.wrap(testor.DESC, width=40)
         table.add_row([testor.ID, status, lines.pop(0)])
         for line in lines:
-            table.add_row(['','',line])
+            table.add_row(['', '', line])
     if test_reqs:
         print(table)
     return err

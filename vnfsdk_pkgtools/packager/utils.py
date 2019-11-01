@@ -18,11 +18,13 @@ from io import BytesIO
 import logging
 import os
 import os.path
-import urlparse
 import subprocess
 import tempfile
 
 import requests
+import six
+from six.moves.urllib import parse as urlparse
+
 
 LOG = logging.getLogger(__name__)
 
@@ -59,13 +61,13 @@ def _run_cmd(cmd, **kwargs):
     else:
         raise RuntimeError("cmd must be string or list")
 
-    for key, value in kwargs.iteritems():
+    for key, value in six.iteritems(kwargs):
         args.append(key)
         if value:
             args.append(value)
     try:
         LOG.debug("Executing %s", args)
-        return subprocess.check_output(args)
+        return str(subprocess.check_output(args).decode('utf-8'))
     except subprocess.CalledProcessError as e:
         LOG.error("Executing %s failed with return code %d, output: %s",
                   e.cmd, e.returncode, e.output)
@@ -89,7 +91,7 @@ def verify(msg_file, cert_file, cms, no_verify_cert=False):
     if no_verify_cert:
         args.append("-no_signer_cert_verify")
 
-    with tempfile.NamedTemporaryFile() as f:
+    with tempfile.NamedTemporaryFile(mode='w') as f:
         f.write(cms)
         f.flush()
         kwargs = {

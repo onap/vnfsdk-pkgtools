@@ -20,6 +20,7 @@ import os
 import pkg_resources
 import re
 
+import six
 from toscaparser.common.exception import ValidationError
 from toscaparser.tosca_template import ToscaTemplate
 
@@ -122,7 +123,7 @@ class ToscaparserValidator(validator.ValidatorBase):
         if not isinstance(value, dict):
             msg = "node %s: value %s is not a map of string"
             raise HpaValueError(msg % (refkey, value))
-        for (key, hpa_value) in value.iteritems():
+        for (key, hpa_value) in six.iteritems(value):
             if key not in hpa_schema:
                 msg = "node %s: %s is NOT a valid HPA key"
                 raise HpaValueError(msg  % (refkey, key))
@@ -134,18 +135,18 @@ class ToscaparserValidator(validator.ValidatorBase):
             if not isinstance(hpa_dict, dict):
                 msg = "node %s, HPA key %s: %s is NOT a valid json encoded string of dict"
                 raise HpaValueError(msg % (refkey, key, hpa_value.encode('ascii', 'replace')))
-            for (attr, val) in hpa_dict.iteritems():
+            for (attr, val) in six.iteritems(hpa_dict):
                 if attr not in hpa_schema[key]:
                     msg = "node %s, HPA key %s: %s is NOT valid HPA attribute"
                     raise HpaValueError(msg % (refkey, key, attr))
-                if not isinstance(val, basestring):
+                if not isinstance(val, six.string_types):
                     msg = ("node %s, HPA key %s, attr %s: %s is not a string attr value")
-                    raise HpaValueError(msg % (refkey, key, attr, str(val).encode('ascii','replace')))
+                    raise HpaValueError(msg % (refkey, key, attr, str(val).encode('ascii', 'replace')))
                 attr_schema = hpa_schema[key][attr]
                 if not re.match(attr_schema, str(val)):
                     msg = ("node %s, HPA key %s, attr %s: %s is not a valid HPA "
                           "attr value, expected re pattern is %s")
-                    raise HpaValueError(msg % (refkey, key, attr, val.encode('ascii','replace'), attr_schema))
+                    raise HpaValueError(msg % (refkey, key, attr, val.encode('ascii', 'replace'), attr_schema))
 
     def validate_hpa_value(self, refkey, hpa_schema, values):
         if isinstance(values, list):

@@ -39,4 +39,4 @@ def test_load_bad_definition(tmpdir):
 
 def test_load_defualt_definition(tmpdir):
     p = tmpdir.join("non_exist")
-    assert 1 == utils.load_definitions(str(p),defaults=1)
+    assert 1 == utils.load_definitions(str(p), defaults=1)

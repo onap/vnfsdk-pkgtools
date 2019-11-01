@@ -85,7 +85,7 @@ class R26881(vnfreq.TesterBase):
                 # TODO(llu) nfv-toscaparser now doesn't support artifacts
                 # yet, we have to hack it for now.
                 # See https://jira.opnfv.org/browse/PARSER-184.
-                for name, props in node.entity_tpl.get('artifacts', {}).iteritems():
+                for name, props in six.iteritems(node.entity_tpl.get('artifacts', {})):
                     file = props.get('file', None)
                     if file and \
                        os.path.isfile(os.path.join(entry_path, file)) or \

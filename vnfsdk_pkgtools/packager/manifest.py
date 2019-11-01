@@ -17,6 +17,7 @@ from collections import namedtuple
 import os
 import tempfile
 
+import six
 import udatetime
 
 from vnfsdk_pkgtools.packager import utils
@@ -64,7 +65,7 @@ class Manifest(object):
         line or a line with only spaces and tabs.
         '''
         block_content = [ ]
-        with open(os.path.join(self.root, self.path),'rU') as fp:
+        with open(os.path.join(self.root, self.path), 'rU') as fp:
             for line in fp:
                 line = line.strip(' \t\n')
                 if line:
@@ -153,7 +154,7 @@ class Manifest(object):
         ret += "vnf_package_version: %s\n" % (self.metadata['vnf_package_version'])
         ret += "vnf_release_data_time: %s\n" % (self.metadata['vnf_release_data_time'])
         # degist
-        for (key, digest) in self.digests.iteritems():
+        for (key, digest) in six.iteritems(self.digests):
             ret += "\n"
             ret += "Source: %s\n" % key
             ret += "Algorithm: %s\n" % digest[0]
@@ -178,10 +179,9 @@ class Manifest(object):
     def save_to_temp_without_cms(self):
         # we need to strip cms block with out changing the order of the
         # file digest content before we verify the signature
-        tmpfile = tempfile.NamedTemporaryFile(delete=False)
         skip = False
         lines = []
-        with open(os.path.join(self.root, self.path),'rU') as fp:
+        with open(os.path.join(self.root, self.path), 'rU') as fp:
             for line in fp:
                 if '--BEGIN CMS--' in line:
                     skip = True
@@ -192,6 +192,7 @@ class Manifest(object):
         # strip trailing empty lines
         content = ''.join(lines).rstrip(' \n\t')
         content += '\n'
+        tmpfile = tempfile.NamedTemporaryFile(mode='w',delete=False)
         tmpfile.write(content)
         tmpfile.close()
         return tmpfile.name

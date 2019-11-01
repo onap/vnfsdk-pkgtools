@@ -22,9 +22,6 @@ import sys
 
 if sys.version_info < (2, 7):
     sys.exit('VNF SDK requires Python 2.7+')
-if sys.version_info >= (3, 0):
-    sys.exit('VNF SDK does not support Python 3')
-
 
 root_dir = os.path.dirname(__file__)
 install_requires = []
@@ -73,6 +70,7 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: System :: Networking',
         'Topic :: System :: Systems Administration'],

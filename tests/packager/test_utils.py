@@ -28,7 +28,7 @@ MSG_FILE  = os.path.join(RESOURCES_DIR, 'manifest.mf')
 CERT_FILE = os.path.join(RESOURCES_DIR, 'test.crt')
 KEY_FILE  = os.path.join(RESOURCES_DIR, 'test.key')
 
-CONTENT = "needToBeHashed"
+CONTENT = b"needToBeHashed"
 SHA256 = "20a480339aa4371099f9503511dcc5a8051ce3884846678ced5611ec64bbfc9c"
 SHA512 = "dbed8672e752d51d0c7ca42050f67faf1534e58470bba96e787df5c4cf6a4f8ecf7ad45fb9307adbc5b9dec8432627d86b3eb1d3d43ee9c5e93f754ff2825320"
 
