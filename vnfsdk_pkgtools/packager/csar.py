@@ -142,6 +142,13 @@ def write(source, entry, destination, args):
     LOG.debug('Compressing root directory to ZIP')
     with zipfile.ZipFile(destination, 'w', zipfile.ZIP_DEFLATED) as f:
         for root, dirs, files in os.walk(source):
+            # add dir entries
+            for dir in dirs:
+                dir_full_path = os.path.join(root, dir)
+                dir_relative_path = os.path.relpath(dir_full_path, source) + os.sep
+                LOG.debug('Writing to archive: {0}'.format(dir_relative_path))
+                f.write(dir_full_path + os.sep, dir_relative_path)
+
             for file in files:
                 file_full_path = os.path.join(root, file)
                 # skip manifest file here in case we need to generate digest
@@ -152,13 +159,6 @@ def write(source, entry, destination, args):
                     if manifest_file and args.digest:
                         LOG.debug('Update file digest: {0}'.format(file_relative_path))
                         manifest_file.add_file(file_relative_path, args.digest)
-            # add empty dir
-            for dir in dirs:
-                dir_full_path = os.path.join(root, dir)
-                if len(os.listdir(dir_full_path)) == 0:
-                    dir_relative_path = os.path.relpath(dir_full_path, source) + os.sep
-                    LOG.debug('Writing to archive: {0}'.format(dir_relative_path))
-                    f.write(dir_full_path + os.sep, dir_relative_path)
 
         if manifest_file:
             LOG.debug('Update manifest file to temporary file')
