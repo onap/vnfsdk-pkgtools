@@ -159,9 +159,11 @@ class Manifest(object):
             ret += "Source: %s\n" % key
             ret += "Algorithm: %s\n" % digest[0]
             ret += "Hash: %s\n" % digest[1]
+        if self.digests:
+            # empty line between digest and signature section
+            ret += "\n"
         # signature
         if  self.signature:
-            ret += "\n"
             ret += self.signature
         return ret
 
@@ -190,8 +192,7 @@ class Manifest(object):
                 elif not skip:
                     lines.append(line)
         # strip trailing empty lines
-        content = ''.join(lines).rstrip(' \n\t')
-        content += '\n'
+        content = ''.join(lines)
         tmpfile = tempfile.NamedTemporaryFile(mode='w',delete=False)
         tmpfile.write(content)
         tmpfile.close()

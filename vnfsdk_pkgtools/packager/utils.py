@@ -79,7 +79,7 @@ def _run_cmd(cmd, **kwargs):
 
 
 def sign(msg_file, cert_file, key_file):
-    args = ["openssl", "cms", "-sign", "-binary", "-nocerts"]
+    args = ["openssl", "cms", "-sign", "-binary"]
     kwargs = {
               '-in': os.path.abspath(msg_file),
               '-signer': os.path.abspath(cert_file),
@@ -91,9 +91,9 @@ def sign(msg_file, cert_file, key_file):
 
 
 def verify(msg_file, cert_file, cms, no_verify_cert=False):
-    args = ["openssl", "cms", "-verify"]
+    args = ["openssl", "cms", "-verify", "-binary"]
     if no_verify_cert:
-        args.append("-no_signer_cert_verify")
+        args.append("-noverify")
 
     with tempfile.NamedTemporaryFile(mode='w') as f:
         f.write(cms)
