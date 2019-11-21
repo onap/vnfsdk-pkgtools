@@ -40,6 +40,10 @@ def _hash_value_for_file(f, hash_function, block_size=2**20):
 
 
 def cal_file_hash(root, path, algo):
+    if algo == 'SHA-256':
+        algo = 'SHA256'
+    elif algo == 'SHA-512':
+        algo = 'SHA512'
     h = hashlib.new(algo)
     if urlparse.urlparse(path).scheme:
         r = requests.get(path)

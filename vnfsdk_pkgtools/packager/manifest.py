@@ -27,7 +27,7 @@ METADATA_KEYS = [ 'vnf_provider_id',
                   'vnf_release_data_time',
                   'vnf_package_version']
 DIGEST_KEYS = [ 'Source', 'Algorithm', 'Hash' ]
-SUPPORTED_HASH_ALGO = ['SHA256', 'SHA512']
+SUPPORTED_HASH_ALGO = ['SHA-256', 'SHA-512']
 
 class ManifestException(Exception):
     pass

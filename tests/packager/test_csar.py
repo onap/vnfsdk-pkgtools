@@ -54,7 +54,7 @@ ARGS_MANIFEST_DIGEST = {
             'history': 'ChangeLog.txt',
             'tests': 'Tests',
             'licenses': 'Licenses',
-            'digest': 'sha256',
+            'digest': 'sha-256',
             'certificate': None,
             'privkey': None,
         }
@@ -66,7 +66,7 @@ ARGS_MANIFEST_DIGEST_CERT = {
             'history': 'ChangeLog.txt',
             'tests': 'Tests',
             'licenses': 'Licenses',
-            'digest': 'sha256',
+            'digest': 'sha-256',
             'certificate': 'test.crt',
             'privkey': os.path.join(ROOT_DIR, 'tests', 'resources', 'signature', 'test.key')
         }
@@ -90,7 +90,7 @@ INVALID_ARGS_NO_MANIFEST = {
             'history': None,
             'tests': None,
             'licenses': None,
-            'digest': 'sha256',
+            'digest': 'sha-256',
             'certificate': None,
             'privkey': None,
         }

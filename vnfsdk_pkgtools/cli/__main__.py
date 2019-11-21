@@ -24,6 +24,7 @@ import tempfile
 import pkg_resources
 
 from vnfsdk_pkgtools.packager import csar
+from vnfsdk_pkgtools.packager import manifest
 from vnfsdk_pkgtools import validator
 from vnfsdk_pkgtools import vnfreq
 
@@ -99,7 +100,7 @@ def parse_args(args_list):
         help='Directory containing license information, relative to service template directory')
     csar_create.add_argument(
         '--digest',
-        choices=['SHA256', 'SHA512'],
+        choices=manifest.SUPPORTED_HASH_ALGO,
         help='If present, means to check the file deigest in manifest;  compute the digest using the specified hash algorithm of all files in the csar package to be put into the manifest file')
     csar_create.add_argument(
         '--certificate',

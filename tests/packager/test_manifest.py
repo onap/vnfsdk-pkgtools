@@ -37,7 +37,7 @@ METADATA_MISSING = "vnf_product_name: test"
 
 FILE_CONTENT = "needToBeHashed"
 FILE_DIGEST = '\n'.join(['Source: digest',
-                         'Algorithm: SHA256',
+                         'Algorithm: SHA-256',
                          'Hash: 20a480339aa4371099f9503511dcc5a8051ce3884846678ced5611ec64bbfc9c',
                        ])
 
@@ -95,7 +95,7 @@ def test_digest(tmpdir):
     digest.write(FILE_CONTENT)
 
     m = manifest.Manifest(mf.dirname, 'test.mf')
-    assert m.digests['digest'][0] == "SHA256"
+    assert m.digests['digest'][0] == "SHA-256"
     assert m.digests['digest'][1] == "20a480339aa4371099f9503511dcc5a8051ce3884846678ced5611ec64bbfc9c"
 
 def test_add_file(tmpdir):
@@ -106,8 +106,8 @@ def test_add_file(tmpdir):
     digest.write(FILE_CONTENT)
 
     m = manifest.Manifest(mf.dirname, 'test.mf')
-    m.add_file('digest', 'SHA256')
-    assert m.digests['digest'][0] == "SHA256"
+    m.add_file('digest', 'SHA-256')
+    assert m.digests['digest'][0] == "SHA-256"
     assert m.digests['digest'][1] == "20a480339aa4371099f9503511dcc5a8051ce3884846678ced5611ec64bbfc9c"
 
 def test_update_to_file(tmpdir):
@@ -120,7 +120,7 @@ def test_update_to_file(tmpdir):
     digest2.write(FILE_CONTENT)
 
     m1 = manifest.Manifest(mf.dirname, 'test.mf')
-    m1.add_file('digest2', 'SHA256')
+    m1.add_file('digest2', 'SHA-256')
     m1.signature = CMS
     m1.update_to_file()
     m2 = manifest.Manifest(mf.dirname, 'test.mf')
