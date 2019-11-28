@@ -29,6 +29,21 @@ from six.moves.urllib import parse as urlparse
 LOG = logging.getLogger(__name__)
 
 
+def check_file_dir(root, entry, msg, check_for_non=False, check_dir=False):
+    path = os.path.join(root, entry)
+    if check_for_non:
+        ret = not os.path.exists(path)
+        error_msg = '{0} already exists. ' + msg
+    elif check_dir:
+        ret = os.path.isdir(path)
+        error_msg = '{0} is not an existing directory. ' + msg
+    else:
+        ret = os.path.isfile(path)
+        error_msg = '{0} is not an existing file. ' + msg
+    if not ret:
+        raise ValueError(error_msg.format(path))
+
+
 def _hash_value_for_file(f, hash_function, block_size=2**20):
     while True:
         data = f.read(block_size)

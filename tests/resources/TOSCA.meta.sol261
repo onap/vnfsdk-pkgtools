@@ -1,0 +1,9 @@
+TOSCA-Meta-File-Version: 1.0
+CSAR-Version: 1.1
+Created-By: ONAP VNFSDK pkgtools
+Entry-Definitions: test_entry.yaml
+ETSI-Entry-Manifest: test_entry.mf
+ETSI-Entry-Change-Log: ChangeLog.txt
+ETSI-Entry-Licenses: Licenses
+ETSI-Entry-Tests: Tests
+ETSI-Entry-Certificate: test.crt

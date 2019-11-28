@@ -32,7 +32,7 @@ CSAR_OUTPUT_FILE = 'output.csar'
 
 Args = collections.namedtuple('Args',
            ['source', 'entry', 'manifest', 'history', 'tests',
-            'licenses', 'digest', 'certificate', 'privkey'])
+            'licenses', 'digest', 'certificate', 'privkey', 'sol241'])
 
 
 ARGS_MANIFEST = {
@@ -45,6 +45,7 @@ ARGS_MANIFEST = {
             'digest': None,
             'certificate': None,
             'privkey': None,
+            'sol241': False,
         }
 
 ARGS_MANIFEST_DIGEST = {
@@ -57,6 +58,7 @@ ARGS_MANIFEST_DIGEST = {
             'digest': 'sha-256',
             'certificate': None,
             'privkey': None,
+            'sol241': False,
         }
 
 ARGS_MANIFEST_DIGEST_CERT = {
@@ -68,7 +70,8 @@ ARGS_MANIFEST_DIGEST_CERT = {
             'licenses': 'Licenses',
             'digest': 'sha-256',
             'certificate': 'test.crt',
-            'privkey': os.path.join(ROOT_DIR, 'tests', 'resources', 'signature', 'test.key')
+            'privkey': os.path.join(ROOT_DIR, 'tests', 'resources', 'signature', 'test.key'),
+            'sol241': False,
         }
 
 ARGS_NO_MANIFEST = {
@@ -81,6 +84,7 @@ ARGS_NO_MANIFEST = {
             'digest': None,
             'certificate': None,
             'privkey': None,
+            'sol241': True,
         }
 
 INVALID_ARGS_NO_MANIFEST = {
@@ -93,6 +97,7 @@ INVALID_ARGS_NO_MANIFEST = {
             'digest': 'sha-256',
             'certificate': None,
             'privkey': None,
+            'sol241': True,
         }
 
 INVALID_ARGS_NO_PRIVKEY = {
@@ -105,6 +110,7 @@ INVALID_ARGS_NO_PRIVKEY = {
             'digest': None,
             'certificate': 'test.crt',
             'privkey': None,
+            'sol241': True,
         }
 
 

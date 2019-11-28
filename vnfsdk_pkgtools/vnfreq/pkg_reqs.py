@@ -19,7 +19,7 @@ import os
 import six
 from stevedore import driver
 
-from vnfsdk_pkgtools.packager import csar
+from vnfsdk_pkgtools.packager import toscameta
 from vnfsdk_pkgtools.validator import toscaparser_validator as tv
 from vnfsdk_pkgtools import vnfreq
 
@@ -50,7 +50,7 @@ class R77707(vnfreq.TesterBase):
             for file in files:
                 full_path = os.path.join(root, file)
                 rel_path = os.path.relpath(full_path, reader.destination)
-                if rel_path not in (reader.entry_manifest_file, csar.META_FILE):
+                if rel_path not in (reader.entry_manifest_file, toscameta.META_FILE):
                     if rel_path not in reader.manifest.digests:
                         raise vnfreq.VnfRequirementError("Package component %s not found in manifest file" % rel_path)
         return 0

@@ -88,16 +88,19 @@ def parse_args(args_list):
         required=True)
     csar_create.add_argument(
         '--manifest',
-        help='Manifest file relative to service template directory')
+        help='Manifest file relative to service template directory',
+        required=True)
     csar_create.add_argument(
         '--history',
-        help='Change history file relative to service template directory')
+        help='Change history file relative to service template directory',
+        required=True)
     csar_create.add_argument(
         '--tests',
         help='Directory containing test information, relative to service template directory')
     csar_create.add_argument(
         '--licenses',
-        help='Directory containing license information, relative to service template directory')
+        help='Directory containing license information, relative to service template directory',
+        required=True)
     csar_create.add_argument(
         '--digest',
         choices=manifest.SUPPORTED_HASH_ALGO,
@@ -108,6 +111,10 @@ def parse_args(args_list):
     csar_create.add_argument(
         '--privkey',
         help='Private key file for certification, absoluate or relative path')
+    csar_create.add_argument(
+        '--sol241',
+        action='store_true',
+        help='Generate SOL004 v2.4.1 csar for backward compatilibity')
 
 
     csar_open = subparsers.add_parser('csar-open')

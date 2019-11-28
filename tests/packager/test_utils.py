@@ -62,4 +62,70 @@ def test_verify_bad(tmpdir):
     
     with pytest.raises(subprocess.CalledProcessError):
         utils.verify(str(p), CERT_FILE, cms, no_verify_cert=True)
-    
+
+
+CHECK_FILE_CASES = [
+        {
+            'negative': False,
+            'params': {'root': RESOURCES_DIR,
+                       'entry': 'test.key',
+                       'msg': '',
+                       'check_for_non': False,
+                       'check_dir': False,
+                      }
+        },
+        {
+            'negative': False,
+            'params': {'root': RESOURCES_DIR,
+                       'entry': 'non-existing-file',
+                       'msg': '',
+                       'check_for_non': True,
+                       'check_dir': False,
+                      }
+        },
+        {
+            'negative': True,
+            'params': {'root': RESOURCES_DIR,
+                       'entry': 'non-existing-file',
+                       'msg': '',
+                       'check_for_non': False,
+                       'check_dir': False,
+                      }
+        },
+        {
+            'negative': False,
+            'params': {'root': ROOT_DIR,
+                       'entry': 'tests',
+                       'msg': '',
+                       'check_for_non': False,
+                       'check_dir': True,
+                      }
+        },
+        {
+            'negative': False,
+            'params': {'root': ROOT_DIR,
+                       'entry': 'non-existing-dir',
+                       'msg': '',
+                       'check_for_non': True,
+                       'check_dir': True,
+                      }
+        },
+        {
+            'negative': True,
+            'params': {'root': ROOT_DIR,
+                       'entry': 'non-existing-dir',
+                       'msg': '',
+                       'check_for_non': False,
+                       'check_dir': True,
+                      }
+        },
+        ]
+
+
+def test_check_file_dir():
+    for case in CHECK_FILE_CASES:
+        if case['negative']:
+            with pytest.raises(ValueError):
+                utils.check_file_dir(**case['params'])
+        else:
+            utils.check_file_dir(**case['params'])
