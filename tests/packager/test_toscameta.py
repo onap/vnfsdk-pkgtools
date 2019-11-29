@@ -29,35 +29,32 @@ CSAR_RESOURCE_DIR = os.path.join(ROOT_DIR, 'tests', 'resources', 'csar')
 CSAR_ENTRY_FILE = 'test_entry.yaml'
 CSAR_OUTPUT_FILE = 'output.csar'
 
-ARGS_MANIFEST = {
-            'base_dir': CSAR_RESOURCE_DIR,
-            'entry': CSAR_ENTRY_FILE,
-            'manifest': 'test_entry.mf',
-            'changelog': 'ChangeLog.txt',
-            'licenses': 'Licenses',
-            'tests': 'Tests',
-            'certificate': None,
-        }
+ARGS_MANIFEST = {'base_dir': CSAR_RESOURCE_DIR,
+                 'entry': CSAR_ENTRY_FILE,
+                 'manifest': 'test_entry.mf',
+                 'changelog': 'ChangeLog.txt',
+                 'licenses': 'Licenses',
+                 'tests': 'Tests',
+                 'certificate': None,
+                 }
 
-ARGS_MANIFEST_CERTIFICATE = {
-            'base_dir': CSAR_RESOURCE_DIR,
-            'entry': CSAR_ENTRY_FILE,
-            'manifest': 'test_entry.mf',
-            'changelog': 'ChangeLog.txt',
-            'licenses': 'Licenses',
-            'tests': 'Tests',
-            'certificate': 'test.crt',
-        }
+ARGS_MANIFEST_CERTIFICATE = {'base_dir': CSAR_RESOURCE_DIR,
+                             'entry': CSAR_ENTRY_FILE,
+                             'manifest': 'test_entry.mf',
+                             'changelog': 'ChangeLog.txt',
+                             'licenses': 'Licenses',
+                             'tests': 'Tests',
+                             'certificate': 'test.crt',
+                             }
 
-ARGS_NO_MANIFEST = {
-            'base_dir': CSAR_RESOURCE_DIR,
-            'entry': CSAR_ENTRY_FILE,
-            'manifest': None,
-            'changelog': None,
-            'licenses': None,
-            'tests': None,
-            'certificate': None,
-        }
+ARGS_NO_MANIFEST = {'base_dir': CSAR_RESOURCE_DIR,
+                    'entry': CSAR_ENTRY_FILE,
+                    'manifest': None,
+                    'changelog': None,
+                    'licenses': None,
+                    'tests': None,
+                    'certificate': None,
+                    }
 
 
 def _validate_metadata(cls, expected):
@@ -110,12 +107,14 @@ def test_invalid_csar_version():
 
 FROM_FILE_CASES = ['TOSCA.meta.sol261', 'TOSCA.meta.sol241']
 
+
 def _prepare(target, metafile_path):
     shutil.copytree(CSAR_RESOURCE_DIR, target)
     os.mkdir(os.path.join(target, 'TOSCA-Metadata'))
     shutil.copy(metafile_path, os.path.join(target,
                                             'TOSCA-Metadata',
                                             'TOSCA.meta'))
+
 
 def test_create_from_file():
     for case in FROM_FILE_CASES:

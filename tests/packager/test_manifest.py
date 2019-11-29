@@ -32,13 +32,13 @@ METADATA_241 = '\n'.join(["metadata:",
                           "vnf_provider_id: test",
                           "vnf_package_version: 1.0",
                           "vnf_release_data_time: 2017-09-15T15:00:10+08:00",
-                        ])
+                          ])
 
 METADATA_MISSING_KEY = '\n'.join(["metadata:",
-                                   "vnf_product_name: test",
-                                   "vnf_provider_id: test",
-                                   "vnf_package_version:1.0",
-                                ])
+                                  "vnf_product_name: test",
+                                  "vnf_provider_id: test",
+                                  "vnf_package_version:1.0",
+                                  ])
 
 METADATA_MISSING = "vnf_product_name: test"
 
@@ -46,7 +46,7 @@ FILE_CONTENT = "needToBeHashed"
 FILE_DIGEST = '\n'.join(['Source: digest',
                          'Algorithm: SHA-256',
                          'Hash: 20a480339aa4371099f9503511dcc5a8051ce3884846678ced5611ec64bbfc9c',
-                       ])
+                         ])
 
 CMS = '\n'.join(['-----BEGIN CMS-----',
                  'MIICmAYJKoZIhvcNAQcCoIICiTCCAoUCAQExDTALBglghkgBZQMEAgEwCwYJKoZI',
@@ -64,11 +64,11 @@ CMS = '\n'.join(['-----BEGIN CMS-----',
                  'pqE+DUlSFyilc9CQWnSLubkHmM4dZnU7qnNoTBqplDYpOYH3WSNN9Cv322JusAzt',
                  'SzFEv182phI2C5pmjUnf7VG1WMKCH2WNtkYwMUCDcGvbHrh8n+kR8hL/BAs=',
                  '-----END CMS-----',
-                ])
+                 ])
 
 FILE_SOURCE_ONLY = '\n'.join(['Source: source1',
                               'Source: source2',
-                            ])
+                              ])
 
 NON_MANO_ARTIFACTS = '\n'.join(['non_mano_artifact_sets:',
                                 'foo_bar:',
@@ -76,7 +76,7 @@ NON_MANO_ARTIFACTS = '\n'.join(['non_mano_artifact_sets:',
                                 'prv.happy-nfv.cool:',
                                 'Source: happy/cool/123.html',
                                 'Source: happy/cool/cool.json',
-                              ])
+                                ])
 
 
 def test_metadata(tmpdir):
@@ -122,6 +122,7 @@ def test_missing_metadata(tmpdir):
         manifest.Manifest(p.dirname, 'test.mf')
     excinfo.match(r"Unrecognized file digest line vnf_product_name: test:")
 
+
 def test_digest(tmpdir):
     root = tmpdir.mkdir('csar')
     mf = root.join('test.mf')
@@ -132,6 +133,7 @@ def test_digest(tmpdir):
     m = manifest.Manifest(mf.dirname, 'test.mf')
     assert m.digests['digest'][0] == "SHA-256"
     assert m.digests['digest'][1] == "20a480339aa4371099f9503511dcc5a8051ce3884846678ced5611ec64bbfc9c"
+
 
 def test_add_file(tmpdir):
     root = tmpdir.mkdir('csar')
@@ -144,6 +146,7 @@ def test_add_file(tmpdir):
     m.add_file('digest', 'SHA-256')
     assert m.digests['digest'][0] == "SHA-256"
     assert m.digests['digest'][1] == "20a480339aa4371099f9503511dcc5a8051ce3884846678ced5611ec64bbfc9c"
+
 
 def test_update_to_file(tmpdir):
     root = tmpdir.mkdir('csar')
@@ -164,11 +167,13 @@ def test_update_to_file(tmpdir):
     assert len(list(m2.digests.keys())) == 2
     assert m2.signature == CMS
 
+
 def test_signature(tmpdir):
     p = tmpdir.mkdir('csar').join('test.mf')
     p.write(METADATA + "\n\n" + CMS)
     m = manifest.Manifest(p.dirname, 'test.mf')
     assert m.signature == CMS
+
 
 def test_illegal_signature(tmpdir):
     p = tmpdir.mkdir('csar').join('test.mf')
@@ -176,6 +181,7 @@ def test_illegal_signature(tmpdir):
     with pytest.raises(manifest.ManifestException) as excinfo:
         manifest.Manifest(p.dirname, 'test.mf')
     excinfo.match(r"Can NOT find end of sigature block")
+
 
 def test_signature_strip(tmpdir):
     p = tmpdir.mkdir('csar').join('test.mf')
@@ -188,12 +194,14 @@ def test_signature_strip(tmpdir):
     assert m2.signature is None
     os.unlink(newfile)
 
+
 def test_source_only(tmpdir):
     p = tmpdir.mkdir('csar').join('test.mf')
     p.write(METADATA + "\n\n" + FILE_SOURCE_ONLY)
     m = manifest.Manifest(p.dirname, 'test.mf')
     assert 'source1' in m.digests.keys()
     assert 'source2' in m.digests.keys()
+
 
 def test_non_mano_artifacts(tmpdir, mocker):
     mocker.patch('vnfsdk_pkgtools.packager.utils.check_file_dir')

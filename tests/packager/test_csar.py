@@ -31,87 +31,86 @@ CSAR_ENTRY_FILE = 'test_entry.yaml'
 CSAR_OUTPUT_FILE = 'output.csar'
 
 Args = collections.namedtuple('Args',
-           ['source', 'entry', 'manifest', 'history', 'tests',
-            'licenses', 'digest', 'certificate', 'privkey', 'sol241'])
+                              ['source', 'entry', 'manifest',
+                               'history', 'tests', 'licenses',
+                               'digest', 'certificate', 'privkey',
+                               'sol241'])
 
 
-ARGS_MANIFEST = {
-            'source': CSAR_RESOURCE_DIR,
-            'entry': CSAR_ENTRY_FILE,
-            'manifest': 'test_entry.mf',
-            'history': 'ChangeLog.txt',
-            'tests': 'Tests',
-            'licenses': 'Licenses',
-            'digest': None,
-            'certificate': None,
-            'privkey': None,
-            'sol241': False,
-        }
+ARGS_MANIFEST = {'source': CSAR_RESOURCE_DIR,
+                 'entry': CSAR_ENTRY_FILE,
+                 'manifest': 'test_entry.mf',
+                 'history': 'ChangeLog.txt',
+                 'tests': 'Tests',
+                 'licenses': 'Licenses',
+                 'digest': None,
+                 'certificate': None,
+                 'privkey': None,
+                 'sol241': False,
+                 }
 
-ARGS_MANIFEST_DIGEST = {
-            'source': CSAR_RESOURCE_DIR,
-            'entry': CSAR_ENTRY_FILE,
-            'manifest': 'test_entry.mf',
-            'history': 'ChangeLog.txt',
-            'tests': 'Tests',
-            'licenses': 'Licenses',
-            'digest': 'sha-256',
-            'certificate': None,
-            'privkey': None,
-            'sol241': False,
-        }
+ARGS_MANIFEST_DIGEST = {'source': CSAR_RESOURCE_DIR,
+                        'entry': CSAR_ENTRY_FILE,
+                        'manifest': 'test_entry.mf',
+                        'history': 'ChangeLog.txt',
+                        'tests': 'Tests',
+                        'licenses': 'Licenses',
+                        'digest': 'sha-256',
+                        'certificate': None,
+                        'privkey': None,
+                        'sol241': False,
+                        }
 
-ARGS_MANIFEST_DIGEST_CERT = {
-            'source': CSAR_RESOURCE_DIR,
-            'entry': CSAR_ENTRY_FILE,
-            'manifest': 'test_entry.mf',
-            'history': 'ChangeLog.txt',
-            'tests': 'Tests',
-            'licenses': 'Licenses',
-            'digest': 'sha-256',
-            'certificate': 'test.crt',
-            'privkey': os.path.join(ROOT_DIR, 'tests', 'resources', 'signature', 'test.key'),
-            'sol241': False,
-        }
+ARGS_MANIFEST_DIGEST_CERT = {'source': CSAR_RESOURCE_DIR,
+                             'entry': CSAR_ENTRY_FILE,
+                             'manifest': 'test_entry.mf',
+                             'history': 'ChangeLog.txt',
+                             'tests': 'Tests',
+                             'licenses': 'Licenses',
+                             'digest': 'sha-256',
+                             'certificate': 'test.crt',
+                             'privkey': os.path.join(ROOT_DIR, 'tests',
+                                                     'resources',
+                                                     'signature',
+                                                     'test.key'),
+                             'sol241': False,
+                             }
 
-ARGS_NO_MANIFEST = {
-            'source': CSAR_RESOURCE_DIR,
-            'entry': CSAR_ENTRY_FILE,
-            'manifest': None,
-            'history': None,
-            'tests': None,
-            'licenses': None,
-            'digest': None,
-            'certificate': None,
-            'privkey': None,
-            'sol241': True,
-        }
+ARGS_NO_MANIFEST = {'source': CSAR_RESOURCE_DIR,
+                    'entry': CSAR_ENTRY_FILE,
+                    'manifest': None,
+                    'history': None,
+                    'tests': None,
+                    'licenses': None,
+                    'digest': None,
+                    'certificate': None,
+                    'privkey': None,
+                    'sol241': True,
+                    }
 
-INVALID_ARGS_NO_MANIFEST = {
-            'source': CSAR_RESOURCE_DIR,
-            'entry': CSAR_ENTRY_FILE,
-            'manifest': None,
-            'history': None,
-            'tests': None,
-            'licenses': None,
-            'digest': 'sha-256',
-            'certificate': None,
-            'privkey': None,
-            'sol241': True,
-        }
+INVALID_ARGS_NO_MANIFEST = {'source': CSAR_RESOURCE_DIR,
+                            'entry': CSAR_ENTRY_FILE,
+                            'manifest': None,
+                            'history': None,
+                            'tests': None,
+                            'licenses': None,
+                            'digest': 'sha-256',
+                            'certificate': None,
+                            'privkey': None,
+                            'sol241': True,
+                            }
 
-INVALID_ARGS_NO_PRIVKEY = {
-            'source': CSAR_RESOURCE_DIR,
-            'entry': CSAR_ENTRY_FILE,
-            'manifest': 'test_entry.mf',
-            'history': None,
-            'tests': None,
-            'licenses': None,
-            'digest': None,
-            'certificate': 'test.crt',
-            'privkey': None,
-            'sol241': True,
-        }
+INVALID_ARGS_NO_PRIVKEY = {'source': CSAR_RESOURCE_DIR,
+                           'entry': CSAR_ENTRY_FILE,
+                           'manifest': 'test_entry.mf',
+                           'history': None,
+                           'tests': None,
+                           'licenses': None,
+                           'digest': None,
+                           'certificate': 'test.crt',
+                           'privkey': None,
+                           'sol241': True,
+                           }
 
 
 def csar_write_test(args):

@@ -22,17 +22,19 @@ import udatetime
 
 from vnfsdk_pkgtools.packager import utils
 
-METADATA_KEYS = [ 'vnf_provider_id',
-                  'vnf_product_name',
-                  'vnf_release_date_time',
-                  'vnf_package_version']
-DIGEST_KEYS = [ 'Source', 'Algorithm', 'Hash' ]
+METADATA_KEYS = ['vnf_provider_id',
+                 'vnf_product_name',
+                 'vnf_release_date_time',
+                 'vnf_package_version']
+DIGEST_KEYS = ['Source', 'Algorithm', 'Hash']
 SUPPORTED_HASH_ALGO = ['SHA-256', 'SHA-512']
 
 NON_MANO_ARTIFACT_RE = re.compile(r'^[0-9a-z_-]+(\.[0-9a-z_-]+)*:$')
 
+
 class ManifestException(Exception):
     pass
+
 
 class Manifest(object):
     ' Manifest file in CSAR package'
@@ -49,17 +51,17 @@ class Manifest(object):
         # non_mano_artifact dict
         #   :key = set identifier
         #   :value = list of files
-        self.sol241=sol241
+        self.sol241 = sol241
         self.non_mano_artifacts = {}
-        self.blocks = [ ]
+        self.blocks = []
         self._split_blocks()
         self._parse_all_blocks()
 
     @staticmethod
     def __split_line(s):
-        remain=s
+        remain = s
         try:
-            (key, value)=s.split(':', 1)
+            (key, value) = s.split(':', 1)
             value = value.strip()
             remain = None
         except ValueError:
@@ -72,7 +74,7 @@ class Manifest(object):
         Split manifest file into blocks, each block is seperated by a empty
         line or a line with only spaces and tabs.
         '''
-        block_content = [ ]
+        block_content = []
         with open(os.path.join(self.root, self.path), 'rU') as fp:
             for line in fp:
                 line = line.strip(' \t\n')
@@ -106,11 +108,11 @@ class Manifest(object):
             if key in METADATA_KEYS:
                 self.metadata[key] = value
             elif key == 'vnf_release_data_time':
-                #sol004 v2.4.1 compatibility
+                # sol004 v2.4.1 compatibility
                 self.metadata['vnf_release_date_time'] = value
             else:
                 raise ManifestException("Unrecognized metadata %s:" % line)
-        #validate metadata keys
+        # validate metadata keys
         missing_keys = set(METADATA_KEYS) - set(self.metadata.keys())
         if missing_keys:
             raise ManifestException("Missing metadata keys: %s" % ','.join(missing_keys))
@@ -119,7 +121,7 @@ class Manifest(object):
             udatetime.from_string(self.metadata['vnf_release_date_time'])
         except ValueError:
             raise ManifestException("Incorrect IETF RFC 3339 vnf_release_date_time: %s"
-                            % self.metadata['vnf_release_date_time'])
+                                    % self.metadata['vnf_release_date_time'])
 
     def parse_cms(self, lines):
         if '--END CMS--' not in lines[-1]:
@@ -138,12 +140,12 @@ class Manifest(object):
             if key == 'Source':
                 self.digests[value] = (None, None)
             elif key == 'Algorithm':
-                #validate algorithm
+                # validate algorithm
                 desc['Algorithm'] = desc['Algorithm'].upper()
                 if desc['Algorithm'] not in SUPPORTED_HASH_ALGO:
                     raise ManifestException("Unsupported hash algorithm: %s" % desc['Algorithm'])
 
-            #validate hash
+            # validate hash
             if desc.get('Algorithm') and desc.get('Hash') and desc.get('Source'):
                 hash = utils.cal_file_hash(self.root, desc['Source'], desc['Algorithm'])
                 if hash != desc['Hash']:
@@ -213,7 +215,7 @@ class Manifest(object):
             # empty line between digest and signature section
             ret += "\n"
         # signature
-        if  self.signature:
+        if self.signature:
             ret += self.signature
         return ret
 
@@ -242,7 +244,7 @@ class Manifest(object):
                 elif not skip:
                     lines.append(line)
         content = ''.join(lines)
-        tmpfile = tempfile.NamedTemporaryFile(mode='w',delete=False)
+        tmpfile = tempfile.NamedTemporaryFile(mode='w', delete=False)
         tmpfile.write(content)
         tmpfile.close()
         return tmpfile.name

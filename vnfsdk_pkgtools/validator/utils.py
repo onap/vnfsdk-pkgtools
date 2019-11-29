@@ -36,10 +36,10 @@ def load_definitions(config_file, defaults=None):
             if hasattr(err, 'problem_mark'):
                 mark = err.problem_mark
                 errmsg = ("Invalid YAML syntax in Definitions file %(file)s "
-                           "at line: %(line)s, column: %(column)s." %
-                           dict(file=config_file,
-                                line=mark.line + 1,
-                                column=mark.column + 1))
+                          "at line: %(line)s, column: %(column)s." %
+                          dict(file=config_file,
+                               line=mark.line + 1,
+                               column=mark.column + 1))
             else:
                 errmsg = ("YAML error reading Definitions file %s" % config_file)
             LOG.error(errmsg)

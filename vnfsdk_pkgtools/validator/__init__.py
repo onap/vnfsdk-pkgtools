@@ -18,8 +18,8 @@ import abc
 import six
 from stevedore import driver
 
-
 NS = "vnfsdk.pkgtools.validator"
+
 
 def get_validator(params):
     """Get validate driver and load it.
@@ -39,7 +39,6 @@ class ValidatorBase(object):
 
     def __init__(self):
         self.tosca = None
-
 
     @abc.abstractmethod
     def validate(self, reader):

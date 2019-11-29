@@ -13,14 +13,11 @@
 # under the License.
 #
 
-import abc
 import os
 
 import six
-from stevedore import driver
 
 from vnfsdk_pkgtools.packager import toscameta
-from vnfsdk_pkgtools.validator import toscaparser_validator as tv
 from vnfsdk_pkgtools import vnfreq
 
 
@@ -90,7 +87,7 @@ class R26881(vnfreq.TesterBase):
                     if file and \
                        os.path.isfile(os.path.join(entry_path, file)) or \
                        os.path.isfile(os.path.join(reader.destination, file)):
-                           valid_artifacts.append(file)
+                        valid_artifacts.append(file)
         if not valid_artifacts:
             raise vnfreq.VnfRequirementError("No valid binaries or images for VNF instantion found")
         return 0
@@ -111,9 +108,8 @@ class R35851(vnfreq.TesterBase):
         for node in getattr(tosca.tosca, 'nodetemplates', []):
             if tosca.is_type(node, 'tosca.nodes.nfv.VduCp') or \
                tosca.is_type(node, 'tosca.nodes.nfv.VnfVirtualLink'):
-                   found = True
-                   break
+                found = True
+                break
         if not found:
             raise vnfreq.VnfRequirementError("No basic network or application connectivity found")
         return 0
-

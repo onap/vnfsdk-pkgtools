@@ -49,7 +49,7 @@ class ToscaparserValidator(validator.ValidatorBase):
         self.hpa_schema_version = defs.get('metadata', {}).get('version')
         self.hpa_schemas = defs.get('schemas', {})
         self.hpa_mappings = defs.get('mappings', [])
-        #validate schema defined in hpa.yaml is correct
+        # validate schema defined in hpa.yaml is correct
         if not self.hpa_schema_version:
             msg = "No defined version in metadata"
             raise HpaSchemaDefError(msg)
@@ -64,9 +64,9 @@ class ToscaparserValidator(validator.ValidatorBase):
 
     def validate(self, reader):
         entry_path = os.path.join(reader.destination,
-                                       reader.entry_definitions)
+                                  reader.entry_definitions)
         try:
-            #TODO set debug_mode due to upstream bug
+            # TODO set debug_mode due to upstream bug
             #     https://jira.opnfv.org/browse/PARSER-181
             self.tosca = ToscaTemplate(path=entry_path,
                                        no_required_paras_check=True,
@@ -126,10 +126,10 @@ class ToscaparserValidator(validator.ValidatorBase):
         for (key, hpa_value) in six.iteritems(value):
             if key not in hpa_schema:
                 msg = "node %s: %s is NOT a valid HPA key"
-                raise HpaValueError(msg  % (refkey, key))
+                raise HpaValueError(msg % (refkey, key))
             try:
                 hpa_dict = json.loads(hpa_value)
-            except:
+            except Exception:
                 msg = "node %s, HPA key %s: %s is NOT a valid json encoded string"
                 raise HpaValueError(msg % (refkey, key, hpa_value.encode('ascii', 'replace')))
             if not isinstance(hpa_dict, dict):
@@ -145,7 +145,7 @@ class ToscaparserValidator(validator.ValidatorBase):
                 attr_schema = hpa_schema[key][attr]
                 if not re.match(attr_schema, str(val)):
                     msg = ("node %s, HPA key %s, attr %s: %s is not a valid HPA "
-                          "attr value, expected re pattern is %s")
+                           "attr value, expected re pattern is %s")
                     raise HpaValueError(msg % (refkey, key, attr, val.encode('ascii', 'replace'), attr_schema))
 
     def validate_hpa_value(self, refkey, hpa_schema, values):
@@ -167,5 +167,3 @@ class ToscaparserValidator(validator.ValidatorBase):
                         self.validate_hpa_value(refkey,
                                                 self.hpa_schemas[mapping['schema']],
                                                 value)
-
-

@@ -19,7 +19,7 @@ import logging
 import os
 import pprint
 
-from ruamel import yaml # @UnresolvedImport
+from ruamel import yaml
 import six
 
 from vnfsdk_pkgtools.packager import utils
@@ -49,11 +49,11 @@ class ToscaMeta(object):
     META_ENTRY_TESTS_DIR_KEY = 'ETSI-Entry-Tests'
     META_ENTRY_LICENSES_DIR_KEY = 'ETSI-Entry-Licenses'
     META_ENTRY_CERT_FILE_KEY = 'ETSI-Entry-Certificate'
-    REQUIRED_KEYS = [ META_FILE_VERSION_KEY, META_CSAR_VERSION_KEY,
-                      META_CREATED_BY_KEY, META_ENTRY_DEFINITIONS_KEY,
-                      META_ENTRY_MANIFEST_FILE_KEY, META_ENTRY_HISTORY_FILE_KEY,
-                      META_ENTRY_LICENSES_DIR_KEY,
-                    ]
+    REQUIRED_KEYS = [
+        META_FILE_VERSION_KEY, META_CSAR_VERSION_KEY,
+        META_CREATED_BY_KEY, META_ENTRY_DEFINITIONS_KEY,
+        META_ENTRY_MANIFEST_FILE_KEY, META_ENTRY_HISTORY_FILE_KEY,
+        META_ENTRY_LICENSES_DIR_KEY, ]
     OPTIONAL_KEYS = [META_ENTRY_TESTS_DIR_KEY, META_ENTRY_CERT_FILE_KEY]
 
     def __init__(self, base_dir, entry, manifest=None, changelog=None,
@@ -95,8 +95,8 @@ class ToscaMeta(object):
                                   metadata.get(META_ENTRY_DEFINITIONS_KEY))
         try:
             with open(entry_file) as f:
-                v = yaml.safe_load(f)['tosca_definitions_version']
-        except:
+                yaml.safe_load(f)['tosca_definitions_version']
+        except Exception:
             raise ValueError('Entry file {} is not a valid tosca simple yaml file'.format(entry_file))
 
         if metadata.get(self.META_ENTRY_MANIFEST_FILE_KEY):
@@ -180,13 +180,13 @@ class ToscaMeta241(ToscaMeta):
     META_ENTRY_TESTS_DIR_KEY = 'Entry-Tests'
     META_ENTRY_LICENSES_DIR_KEY = 'Entry-Licenses'
     META_ENTRY_CERT_FILE_KEY = 'Entry-Certificate'
-    REQUIRED_KEYS = [ META_FILE_VERSION_KEY, META_CSAR_VERSION_KEY,
-                      META_CREATED_BY_KEY, META_ENTRY_DEFINITIONS_KEY,
-                    ]
-    OPTIONAL_KEYS = [ META_ENTRY_MANIFEST_FILE_KEY, META_ENTRY_HISTORY_FILE_KEY,
-                      META_ENTRY_LICENSES_DIR_KEY,  META_ENTRY_TESTS_DIR_KEY,
-                      META_ENTRY_CERT_FILE_KEY,
-                    ]
+    REQUIRED_KEYS = [
+        META_FILE_VERSION_KEY, META_CSAR_VERSION_KEY,
+        META_CREATED_BY_KEY, META_ENTRY_DEFINITIONS_KEY, ]
+    OPTIONAL_KEYS = [
+        META_ENTRY_MANIFEST_FILE_KEY, META_ENTRY_HISTORY_FILE_KEY,
+        META_ENTRY_LICENSES_DIR_KEY, META_ENTRY_TESTS_DIR_KEY,
+        META_ENTRY_CERT_FILE_KEY, ]
 
 
 class ToscaMeta261(ToscaMeta):
@@ -219,4 +219,3 @@ def create_from_file(base_dir):
                meta_file_version=metadata.get(META_FILE_VERSION_KEY),
                meta_csar_version=metadata.get(META_CSAR_VERSION_KEY),
                meta_created_by=metadata.get(META_CREATED_BY_KEY))
-

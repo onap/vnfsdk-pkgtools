@@ -15,7 +15,9 @@
 #
 
 import pytest
-from vnfsdk_pkgtools.cli import  __main__
+
+from vnfsdk_pkgtools.cli import __main__
+
 
 def test_main(capsys):
     with pytest.raises(SystemExit):
@@ -23,4 +25,3 @@ def test_main(capsys):
         args.func(args)
     out, err = capsys.readouterr()
     assert out.startswith('usage:')
-

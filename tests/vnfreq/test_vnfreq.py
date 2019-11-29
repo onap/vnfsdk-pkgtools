@@ -13,9 +13,8 @@
 # under the License.
 #
 
-import pytest
-
 from vnfsdk_pkgtools import vnfreq
+
 
 class FakeTester(vnfreq.TesterBase):
     ID = 'fake'

@@ -17,7 +17,6 @@
 import sys
 import logging
 import argparse
-import os
 import shutil
 import tempfile
 
@@ -32,14 +31,16 @@ from vnfsdk_pkgtools import vnfreq
 def csar_create_func(namespace):
 
     csar.write(namespace.source,
-                        namespace.entry,
-                        namespace.destination,
-                        args=namespace)
+               namespace.entry,
+               namespace.destination,
+               args=namespace)
+
 
 def csar_open_func(namespace):
     csar.read(namespace.source,
               namespace.destination,
               namespace.no_verify_cert)
+
 
 def csar_validate_func(namespace):
     workdir = tempfile.mkdtemp()
@@ -68,10 +69,10 @@ def parse_args(args_list):
     """
     parser = argparse.ArgumentParser(description='VNF SDK CSAR manipulation tool')
     parser.add_argument('-v', '--verbose',
-            dest='verbosity',
-            action='count',
-            default=0,
-            help='Set verbosity level (can be passed multiple times)')
+                        dest='verbosity',
+                        action='count',
+                        default=0,
+                        help='Set verbosity level (can be passed multiple times)')
 
     subparsers = parser.add_subparsers(help='csar-create')
     csar_create = subparsers.add_parser('csar-create')
@@ -116,7 +117,6 @@ def parse_args(args_list):
         action='store_true',
         help='Generate SOL004 v2.4.1 csar for backward compatilibity')
 
-
     csar_open = subparsers.add_parser('csar-open')
     csar_open.set_defaults(func=csar_open_func)
     csar_open.add_argument(
@@ -130,7 +130,6 @@ def parse_args(args_list):
         '--no-verify-cert',
         action='store_true',
         help="Do NOT verify the signer's certificate")
-
 
     csar_validate = subparsers.add_parser('csar-validate')
     csar_validate.set_defaults(func=csar_validate_func)

@@ -75,7 +75,7 @@ def cal_file_hash(root, path, algo):
 def _run_cmd(cmd, **kwargs):
     if isinstance(cmd, list):
         args = cmd
-    elif isinstance(cmd, string):
+    elif isinstance(cmd, str):
         args = [cmd]
     else:
         raise RuntimeError("cmd must be string or list")
@@ -96,11 +96,10 @@ def _run_cmd(cmd, **kwargs):
 def sign(msg_file, cert_file, key_file):
     args = ["openssl", "cms", "-sign", "-binary"]
     kwargs = {
-              '-in': os.path.abspath(msg_file),
-              '-signer': os.path.abspath(cert_file),
-              '-inkey': os.path.abspath(key_file),
-              '-outform': 'PEM',
-             }
+        '-in': os.path.abspath(msg_file),
+        '-signer': os.path.abspath(cert_file),
+        '-inkey': os.path.abspath(key_file),
+        '-outform': 'PEM', }
 
     return _run_cmd(args, **kwargs)
 
@@ -114,9 +113,8 @@ def verify(msg_file, cert_file, cms, no_verify_cert=False):
         f.write(cms)
         f.flush()
         kwargs = {
-                  '-in': f.name,
-                  '-inform': 'PEM',
-                  '-content': os.path.abspath(msg_file),
-                  '-certfile': os.path.abspath(cert_file),
-                 }
+            '-in': f.name,
+            '-inform': 'PEM',
+            '-content': os.path.abspath(msg_file),
+            '-certfile': os.path.abspath(cert_file), }
         return _run_cmd(args, **kwargs)

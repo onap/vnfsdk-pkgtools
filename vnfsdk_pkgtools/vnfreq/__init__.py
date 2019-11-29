@@ -20,8 +20,8 @@ import prettytable
 import six
 from stevedore import driver
 
-
 NS = "vnfsdk.pkgtools.vnfreq"
+
 
 def get_vnfreq_tester(name):
     """Get vnf requirement tester.
@@ -87,4 +87,3 @@ class TesterBase(object):
             self.err = self._do_check(reader, tosca)
         except Exception as e:
             self.err = e
-

@@ -15,11 +15,11 @@
 
 import logging
 import os
-import pprint
 import tempfile
 import zipfile
 
 import requests
+from ruamel import yaml
 
 from vnfsdk_pkgtools.packager import manifest
 from vnfsdk_pkgtools.packager import toscameta

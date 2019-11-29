@@ -13,8 +13,6 @@
 # under the License.
 #
 
-import os
-
 from ruamel import yaml
 import pytest
 
@@ -23,6 +21,7 @@ from vnfsdk_pkgtools.validator import utils
 CONTENT = "---\n1"
 
 BAD_CONTENT = "---\na: b\n- d"
+
 
 def test_load_definition(tmpdir):
     p = tmpdir.join("test_definition.yaml")

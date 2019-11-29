@@ -28,17 +28,20 @@ CSAR_PATH = os.path.join(RESOURCES_DIR, 'test_import.csar')
 HPA_PATH = os.path.join(RESOURCES_DIR, 'hpa.csar')
 BAD_HPA_PATH = os.path.join(RESOURCES_DIR, 'hpa_bad.csar')
 
+
 def test_validate(tmpdir):
     reader = csar._CSARReader(CSAR_PATH, str(tmpdir.mkdir('validate')))
     validator = toscaparser_validator.ToscaparserValidator()
     validator.validate(reader)
     assert hasattr(validator, 'tosca')
 
+
 def test_validate_hpa(tmpdir):
     reader = csar._CSARReader(HPA_PATH, str(tmpdir.mkdir('validate')))
     validator = toscaparser_validator.ToscaparserValidator()
     validator.validate(reader)
     assert hasattr(validator, 'tosca')
+
 
 def test_validate_hpa_bad(tmpdir):
     reader = csar._CSARReader(BAD_HPA_PATH, str(tmpdir.mkdir('validate')))
