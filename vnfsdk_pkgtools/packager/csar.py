@@ -89,7 +89,7 @@ def write(source, entry, destination, args):
                     file_relative_path = os.path.relpath(file_full_path, source)
                     LOG.debug('Writing to archive: {0}'.format(file_relative_path))
                     f.write(file_full_path, file_relative_path)
-                    if manifest_file and args.digest:
+                    if manifest_file:
                         LOG.debug('Update file digest: {0}'.format(file_relative_path))
                         manifest_file.add_file(file_relative_path, args.digest)
         if manifest_file:

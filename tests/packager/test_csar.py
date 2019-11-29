@@ -121,9 +121,6 @@ def csar_write_test(args):
         csar.write(args.source, args.entry, csar_target_dir + '/' + CSAR_OUTPUT_FILE, args)
         csar.read(csar_target_dir + '/' + CSAR_OUTPUT_FILE, csar_extract_dir, True)
         assert filecmp.cmp(args.source + '/' + args.entry, csar_extract_dir + '/' + args.entry)
-        if(args.manifest and not args.digest):
-            assert filecmp.cmp(args.source + '/' + args.manifest,
-                               csar_extract_dir + '/' + args.manifest)
         if(args.history):
             assert filecmp.cmp(args.source + '/' + args.history,
                                csar_extract_dir + '/' + args.history)

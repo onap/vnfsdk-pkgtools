@@ -59,6 +59,10 @@ CMS = '\n'.join(['-----BEGIN CMS-----',
                  '-----END CMS-----',
                 ])
 
+FILE_SOURCE_ONLY = '\n'.join(['Source: source1',
+                              'Source: source2',
+                           ])
+
 def test_metadata(tmpdir):
     p = tmpdir.mkdir('csar').join('test.mf')
     p.write(METADATA)
@@ -85,7 +89,7 @@ def test_missing_metadata(tmpdir):
 
     with pytest.raises(manifest.ManifestException) as excinfo:
         manifest.Manifest(p.dirname, 'test.mf')
-    excinfo.match(r"Unknown key in line")
+    excinfo.match(r"Unrecognized file digest line vnf_product_name: test:")
 
 def test_digest(tmpdir):
     root = tmpdir.mkdir('csar')
@@ -152,3 +156,10 @@ def test_signature_strip(tmpdir):
     assert m1.metadata == m2.metadata
     assert m2.signature is None
     os.unlink(newfile)
+
+def test_source_only(tmpdir):
+    p = tmpdir.mkdir('csar').join('test.mf')
+    p.write(METADATA + "\n\n" + FILE_SOURCE_ONLY)
+    m = manifest.Manifest(p.dirname, 'test.mf')
+    assert 'source1' in m.digests.keys()
+    assert 'source2' in m.digests.keys()

@@ -45,7 +45,7 @@ class Manifest(object):
         self.signature = None
         self.blocks = [ ]
         self._split_blocks()
-        self._parse_blocks()
+        self._parse_all_blocks()
 
     @staticmethod
     def __split_line(s):
@@ -77,70 +77,78 @@ class Manifest(object):
         if len(block_content):
             self.blocks.append(block_content)
 
-    def _parse_blocks(self):
+    def _parse_all_blocks(self):
         for block in self.blocks:
-            (key, value, remain) = self.__split_line(block.pop(0))
-            if key == 'metadata':
-                # metadata block
-                for line in block:
-                    (key, value, remain) = self.__split_line(line)
-                    if key in METADATA_KEYS:
-                        self.metadata[key] = value
-                    else:
-                        raise ManifestException("Unrecognized metadata %s:" % line)
-                #validate metadata keys
-                missing_keys = set(METADATA_KEYS) - set(self.metadata.keys())
-                if missing_keys:
-                    raise ManifestException("Missing metadata keys: %s" % ','.join(missing_keys))
-                # validate vnf_release_data_time
-                try:
-                    udatetime.from_string(self.metadata['vnf_release_data_time'])
-                except ValueError:
-                    raise ManifestException("Non IETF RFC 3339 vnf_release_data_time: %s"
-                                    % self.metadata['vnf_release_data_time'])
-            elif key in DIGEST_KEYS:
-                # file digest block
-                desc = {}
-                desc[key] = value
-                for line in block:
-                    (key, value, remain) = self.__split_line(line)
-                    if key in DIGEST_KEYS:
-                        desc[key] = value
-                    else:
-                        raise ManifestException("Unrecognized file digest line %s:" % line)
-                # validate file digest keys
-                missing_keys = set(DIGEST_KEYS) - set(desc.keys())
-                if missing_keys:
-                    raise ManifestException("Missing file digest keys: %s" % ','.join(missing_keys))
-                # validate file digest algo
-                desc['Algorithm'] = desc['Algorithm'].upper()
-                if desc['Algorithm'] not in SUPPORTED_HASH_ALGO:
-                    raise ManifestException("Unsupported hash algorithm: %s" % desc['Algorithm'])
-                # validate file digest hash
-                hash = utils.cal_file_hash(self.root, desc['Source'], desc['Algorithm'])
-                if hash != desc['Hash']:
-                    raise ManifestException("Mismatched hash for file %s" % desc['Source'])
-                # nothing is wrong, let's store this
-                self.digests[desc['Source']] = (desc['Algorithm'], desc['Hash'])
-            elif key:
-                raise ManifestException("Unknown key in line '%s:%s'" % (key, value))
-            elif '--BEGIN CMS--' in remain:
-                if '--END CMS--' not in block[-1]:
-                    raise ManifestException("Can NOT find end of sigature block")
-                self.signature = remain + '\n' + '\n'.join(block)
+            if block[0] == 'metadata:':
+                self.parse_metadata(block)
+            elif '--BEGIN CMS--' in block[0]:
+                self.parse_cms(block)
             else:
-                raise ManifestException("Unknown content: '%s'" % remain)
+                self.parse_digest(block)
 
         if not self.metadata:
             raise ManifestException("No metadata")
 
+    def parse_metadata(self, lines):
+        # Skip the first line
+        for line in lines[1:]:
+            (key, value, remain) = self.__split_line(line)
+            if key in METADATA_KEYS:
+                self.metadata[key] = value
+            else:
+                raise ManifestException("Unrecognized metadata %s:" % line)
+        #validate metadata keys
+        missing_keys = set(METADATA_KEYS) - set(self.metadata.keys())
+        if missing_keys:
+            raise ManifestException("Missing metadata keys: %s" % ','.join(missing_keys))
+        # validate vnf_release_data_time
+        try:
+            udatetime.from_string(self.metadata['vnf_release_data_time'])
+        except ValueError:
+            raise ManifestException("Non IETF RFC 3339 vnf_release_data_time: %s"
+                            % self.metadata['vnf_release_data_time'])
+
+    def parse_cms(self, lines):
+        if '--END CMS--' not in lines[-1]:
+            raise ManifestException("Can NOT find end of sigature block")
+        self.signature = '\n'.join(lines)
+
+    def parse_digest(self, lines):
+        desc = {}
+        for line in lines:
+            (key, value, remain) = self.__split_line(line)
+            if key in DIGEST_KEYS:
+                desc[key] = value
+            else:
+                raise ManifestException("Unrecognized file digest line %s:" % line)
+
+            if key == 'Source':
+                self.digests[value] = (None, None)
+            elif key == 'Algorithm':
+                #validate algorithm
+                desc['Algorithm'] = desc['Algorithm'].upper()
+                if desc['Algorithm'] not in SUPPORTED_HASH_ALGO:
+                    raise ManifestException("Unsupported hash algorithm: %s" % desc['Algorithm'])
+
+            #validate hash
+            if desc.get('Algorithm') and desc.get('Hash') and desc.get('Source'):
+                hash = utils.cal_file_hash(self.root, desc['Source'], desc['Algorithm'])
+                if hash != desc['Hash']:
+                    raise ManifestException("Mismatched hash for file %s" % desc['Source'])
+                # nothing is wrong, let's store this and start a new round
+                self.digests[desc['Source']] = (desc['Algorithm'], desc['Hash'])
+                desc = {}
+
     def add_file(self, rel_path, algo='SHA256'):
         '''Add file to the manifest and calculate the digest
         '''
-        algo = algo.upper()
-        if algo not in SUPPORTED_HASH_ALGO:
-            raise ManifestException("Unsupported hash algorithm: %s" % algo)
-        hash = utils.cal_file_hash(self.root, rel_path, algo)
+        if algo:
+            algo = algo.upper()
+            if algo not in SUPPORTED_HASH_ALGO:
+                raise ManifestException("Unsupported hash algorithm: %s" % algo)
+            hash = utils.cal_file_hash(self.root, rel_path, algo)
+        else:
+            hash = None
         self.digests[rel_path] = (algo, hash)
 
     def return_as_string(self):
@@ -157,8 +165,9 @@ class Manifest(object):
         for (key, digest) in six.iteritems(self.digests):
             ret += "\n"
             ret += "Source: %s\n" % key
-            ret += "Algorithm: %s\n" % digest[0]
-            ret += "Hash: %s\n" % digest[1]
+            if digest[0]:
+                ret += "Algorithm: %s\n" % digest[0]
+                ret += "Hash: %s\n" % digest[1]
         if self.digests:
             # empty line between digest and signature section
             ret += "\n"
