@@ -24,7 +24,7 @@ from vnfsdk_pkgtools.packager import utils
 
 METADATA_KEYS = [ 'vnf_provider_id',
                   'vnf_product_name',
-                  'vnf_release_data_time',
+                  'vnf_release_date_time',
                   'vnf_package_version']
 DIGEST_KEYS = [ 'Source', 'Algorithm', 'Hash' ]
 SUPPORTED_HASH_ALGO = ['SHA-256', 'SHA-512']
@@ -36,7 +36,7 @@ class ManifestException(Exception):
 
 class Manifest(object):
     ' Manifest file in CSAR package'
-    def __init__(self, root_path, manifest_path):
+    def __init__(self, root_path, manifest_path, sol241=False):
         self.path = manifest_path
         self.root = root_path
         self.metadata = {}
@@ -49,6 +49,7 @@ class Manifest(object):
         # non_mano_artifact dict
         #   :key = set identifier
         #   :value = list of files
+        self.sol241=sol241
         self.non_mano_artifacts = {}
         self.blocks = [ ]
         self._split_blocks()
@@ -104,18 +105,21 @@ class Manifest(object):
             (key, value, remain) = self.__split_line(line)
             if key in METADATA_KEYS:
                 self.metadata[key] = value
+            elif key == 'vnf_release_data_time':
+                #sol004 v2.4.1 compatibility
+                self.metadata['vnf_release_date_time'] = value
             else:
                 raise ManifestException("Unrecognized metadata %s:" % line)
         #validate metadata keys
         missing_keys = set(METADATA_KEYS) - set(self.metadata.keys())
         if missing_keys:
             raise ManifestException("Missing metadata keys: %s" % ','.join(missing_keys))
-        # validate vnf_release_data_time
+        # validate vnf_release_date_time
         try:
-            udatetime.from_string(self.metadata['vnf_release_data_time'])
+            udatetime.from_string(self.metadata['vnf_release_date_time'])
         except ValueError:
-            raise ManifestException("Non IETF RFC 3339 vnf_release_data_time: %s"
-                            % self.metadata['vnf_release_data_time'])
+            raise ManifestException("Incorrect IETF RFC 3339 vnf_release_date_time: %s"
+                            % self.metadata['vnf_release_date_time'])
 
     def parse_cms(self, lines):
         if '--END CMS--' not in lines[-1]:
@@ -186,7 +190,11 @@ class Manifest(object):
         ret += "vnf_product_name: %s\n" % (self.metadata['vnf_product_name'])
         ret += "vnf_provider_id: %s\n" % (self.metadata['vnf_provider_id'])
         ret += "vnf_package_version: %s\n" % (self.metadata['vnf_package_version'])
-        ret += "vnf_release_data_time: %s\n" % (self.metadata['vnf_release_data_time'])
+        if self.sol241:
+            ret += "vnf_release_data_time: %s\n" % (self.metadata['vnf_release_date_time'])
+        else:
+            ret += "vnf_release_date_time: %s\n" % (self.metadata['vnf_release_date_time'])
+
         # non_mano_artifacts
         if self.non_mano_artifacts:
             ret += "\nnon_mano_artifact_sets:\n"

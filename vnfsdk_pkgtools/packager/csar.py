@@ -56,7 +56,7 @@ def write(source, entry, destination, args):
                            args.tests, args.certificate)
 
     if args.manifest:
-        manifest_file = manifest.Manifest(source, args.manifest)
+        manifest_file = manifest.Manifest(source, args.manifest, args.sol241)
         manifest_file_full_path = os.path.join(source, args.manifest)
     elif args.certificate or args.digest:
         raise ValueError("Must specify manifest file if certificate or digest is specified")

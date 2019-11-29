@@ -24,8 +24,15 @@ METADATA = '\n'.join(["metadata:",
                       "vnf_product_name: test",
                       "vnf_provider_id: test",
                       "vnf_package_version:1.0",
-                      "vnf_release_data_time: 2017-09-15T15:00:10+08:00",
+                      "vnf_release_date_time: 2017-09-15T15:00:10+08:00",
                       ])
+
+METADATA_241 = '\n'.join(["metadata:",
+                          "vnf_product_name: test",
+                          "vnf_provider_id: test",
+                          "vnf_package_version: 1.0",
+                          "vnf_release_data_time: 2017-09-15T15:00:10+08:00",
+                        ])
 
 METADATA_MISSING_KEY = '\n'.join(["metadata:",
                                    "vnf_product_name: test",
@@ -61,7 +68,7 @@ CMS = '\n'.join(['-----BEGIN CMS-----',
 
 FILE_SOURCE_ONLY = '\n'.join(['Source: source1',
                               'Source: source2',
-                           ])
+                            ])
 
 NON_MANO_ARTIFACTS = '\n'.join(['non_mano_artifact_sets:',
                                 'foo_bar:',
@@ -69,7 +76,7 @@ NON_MANO_ARTIFACTS = '\n'.join(['non_mano_artifact_sets:',
                                 'prv.happy-nfv.cool:',
                                 'Source: happy/cool/123.html',
                                 'Source: happy/cool/cool.json',
-                             ])
+                              ])
 
 
 def test_metadata(tmpdir):
@@ -80,7 +87,22 @@ def test_metadata(tmpdir):
     assert m.metadata['vnf_product_name'] == 'test'
     assert m.metadata['vnf_provider_id'] == 'test'
     assert m.metadata['vnf_package_version'] == '1.0'
-    assert m.metadata['vnf_release_data_time'] == '2017-09-15T15:00:10+08:00'
+    assert m.metadata['vnf_release_date_time'] == '2017-09-15T15:00:10+08:00'
+
+
+def test_metadata_241(tmpdir):
+    # metadata for SOL004 v2.4.1
+    p = tmpdir.mkdir('csar').join('test.mf')
+    p.write(METADATA_241)
+
+    m = manifest.Manifest(p.dirname, 'test.mf')
+    assert m.metadata['vnf_product_name'] == 'test'
+    assert m.metadata['vnf_provider_id'] == 'test'
+    assert m.metadata['vnf_package_version'] == '1.0'
+    assert m.metadata['vnf_release_date_time'] == '2017-09-15T15:00:10+08:00'
+
+    m241 = manifest.Manifest(p.dirname, 'test.mf', sol241=True)
+    assert METADATA_241 in m241.return_as_string()
 
 
 def test_metadata_missing_key(tmpdir):
