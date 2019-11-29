@@ -13,8 +13,8 @@
 # under the License.
 #
 
-from collections import namedtuple
 import os
+import re
 import tempfile
 
 import six
@@ -29,6 +29,8 @@ METADATA_KEYS = [ 'vnf_provider_id',
 DIGEST_KEYS = [ 'Source', 'Algorithm', 'Hash' ]
 SUPPORTED_HASH_ALGO = ['SHA-256', 'SHA-512']
 
+NON_MANO_ARTIFACT_RE = re.compile(r'^[0-9a-z_-]+(\.[0-9a-z_-]+)*:$')
+
 class ManifestException(Exception):
     pass
 
@@ -42,7 +44,12 @@ class Manifest(object):
         #   :key = source
         #   :value = (algorithm, hash)
         self.digests = {}
+        # signature string, in CMS format
         self.signature = None
+        # non_mano_artifact dict
+        #   :key = set identifier
+        #   :value = list of files
+        self.non_mano_artifacts = {}
         self.blocks = [ ]
         self._split_blocks()
         self._parse_all_blocks()
@@ -81,6 +88,8 @@ class Manifest(object):
         for block in self.blocks:
             if block[0] == 'metadata:':
                 self.parse_metadata(block)
+            elif block[0] == 'non_mano_artifact_sets:':
+                self.parse_non_mano_artifacts(block)
             elif '--BEGIN CMS--' in block[0]:
                 self.parse_cms(block)
             else:
@@ -139,6 +148,23 @@ class Manifest(object):
                 self.digests[desc['Source']] = (desc['Algorithm'], desc['Hash'])
                 desc = {}
 
+    def parse_non_mano_artifacts(self, lines):
+        # Skip the first line
+        identifier = None
+        for line in lines[1:]:
+            if re.match(NON_MANO_ARTIFACT_RE, line):
+                # new non mano artifact identifier
+                identifier = line[:-1]
+                self.non_mano_artifacts[identifier] = []
+            else:
+                (key, value, remain) = self.__split_line(line)
+                if key == 'Source' and value and not remain and identifier:
+                    # check for file existence
+                    utils.check_file_dir(self.root, value)
+                    self.non_mano_artifacts[identifier].append(value)
+                else:
+                    raise ManifestException("Unrecogized non mano artifacts line %s:" % line)
+
     def add_file(self, rel_path, algo='SHA256'):
         '''Add file to the manifest and calculate the digest
         '''
@@ -161,6 +187,13 @@ class Manifest(object):
         ret += "vnf_provider_id: %s\n" % (self.metadata['vnf_provider_id'])
         ret += "vnf_package_version: %s\n" % (self.metadata['vnf_package_version'])
         ret += "vnf_release_data_time: %s\n" % (self.metadata['vnf_release_data_time'])
+        # non_mano_artifacts
+        if self.non_mano_artifacts:
+            ret += "\nnon_mano_artifact_sets:\n"
+            for (key, sources) in six.iteritems(self.non_mano_artifacts):
+                ret += key + ":\n"
+                for s in sources:
+                    ret += "Source: %s\n" % s
         # degist
         for (key, digest) in six.iteritems(self.digests):
             ret += "\n"
@@ -200,7 +233,6 @@ class Manifest(object):
                     skip = False
                 elif not skip:
                     lines.append(line)
-        # strip trailing empty lines
         content = ''.join(lines)
         tmpfile = tempfile.NamedTemporaryFile(mode='w',delete=False)
         tmpfile.write(content)

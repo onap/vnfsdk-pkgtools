@@ -63,6 +63,15 @@ FILE_SOURCE_ONLY = '\n'.join(['Source: source1',
                               'Source: source2',
                            ])
 
+NON_MANO_ARTIFACTS = '\n'.join(['non_mano_artifact_sets:',
+                                'foo_bar:',
+                                'Source: foobar/foo/foo.yaml',
+                                'prv.happy-nfv.cool:',
+                                'Source: happy/cool/123.html',
+                                'Source: happy/cool/cool.json',
+                             ])
+
+
 def test_metadata(tmpdir):
     p = tmpdir.mkdir('csar').join('test.mf')
     p.write(METADATA)
@@ -163,3 +172,15 @@ def test_source_only(tmpdir):
     m = manifest.Manifest(p.dirname, 'test.mf')
     assert 'source1' in m.digests.keys()
     assert 'source2' in m.digests.keys()
+
+def test_non_mano_artifacts(tmpdir, mocker):
+    mocker.patch('vnfsdk_pkgtools.packager.utils.check_file_dir')
+    p = tmpdir.mkdir('csar').join('test.mf')
+    p.write(METADATA + "\n\n" + NON_MANO_ARTIFACTS)
+    m = manifest.Manifest(p.dirname, 'test.mf')
+    assert 'prv.happy-nfv.cool' in m.non_mano_artifacts.keys()
+    assert 'happy/cool/123.html' in m.non_mano_artifacts['prv.happy-nfv.cool']
+    output = m.return_as_string()
+    assert 'non_mano_artifact_sets:' in output
+    assert 'foo_bar:' in output
+    assert 'Source: happy/cool/123.html' in output
